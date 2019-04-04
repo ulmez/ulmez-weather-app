@@ -5,9 +5,11 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+
+import 'font-awesome/css/font-awesome.min.css';
+import './index.css';
 
 ReactDOM.render((
     <BrowserRouter>

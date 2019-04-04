@@ -2,7 +2,16 @@
 
 body {
   font-family: 'Lato';
-	font-size: 1em;
+  font-size: 1em;
+  background: #f7f4d6; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #f7f4d6, #add5e2); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #f7f4d6, #add5e2); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #f7f4d6, #add5e2); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #f7f4d6, #add5e2); /* Standard syntax */
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .cursive-text {
