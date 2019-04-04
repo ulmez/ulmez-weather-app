@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
-import './App.css';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import axios from 'axios';
+
+import StartPage from './main/pages/startPage/StartPage';
+
+import './App.css';
 
 class App extends Component {
   constructor(props) {
@@ -32,12 +35,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="col">Hello World 1</div>
-          <div className="col cursive-text">Hello World 2</div>
-          <div className="col">Hello World 3</div>
-          <div className="col">Hello World 4</div>
-        </div>
+        <Route exact path="/" component={StartPage} />
       </div>
     );
   }
