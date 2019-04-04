@@ -8,12 +8,6 @@ var logger = require('morgan');
 var multipart = require('connect-multiparty');
 
 var testsRouter = require('./routes/tests');
-// var usersRouter = require('./routes/users');
-// var personsRouter = require('./routes/persons');
-// var productsRouter = require('./routes/products');
-// var categoriesRouter = require('./routes/categories');
-// var ordersRouter = require('./routes/orders');
-// var scoresRouter = require('./routes/scores');
 
 var app = express();
 
@@ -27,12 +21,6 @@ app.use(cookieParser());
 app.use(multipart());
 
 app.use('/tests', testsRouter);
-// app.use('/users', usersRouter);
-// app.use('/persons', personsRouter);
-// app.use('/products', productsRouter);
-// app.use('/categories', categoriesRouter);
-// app.use('/orders', ordersRouter);
-// app.use('/scores', scoresRouter);
 
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('/react-client/build'));
