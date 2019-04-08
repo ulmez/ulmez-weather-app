@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './StartPage.css';
+import ListBox from '../listBox/ListBox';
 
 class StartPage extends Component {
     render() {
@@ -26,6 +27,14 @@ class StartPage extends Component {
                             </span>
                         </p>
                     </div>
+                </div>
+                <div className="row">
+                    <ListBox />
+                    <ListBox />
+                    <ListBox />
+                    <ListBox />
+                    <ListBox />
+                    <ListBox />
                 </div>
             </div>
         );

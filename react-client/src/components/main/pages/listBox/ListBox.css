@@ -1,0 +1,11 @@
+.list-box.background-outer {
+    background-color: transparent;
+}
+
+.list-box.background-inner {
+    background-color: gray;
+}
+
+.list-box.box-height {
+    height: 100px;
+}
