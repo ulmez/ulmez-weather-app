@@ -5,6 +5,7 @@ import axios from 'axios';
 import StartPage from './main/pages/startPage/StartPage';
 import HeaderPage from './main/pages/header/HeaderPage';
 import RegisterPage from './main/pages/registerPage/RegisterPage';
+import LoginPage from './main/pages/loginPage/LoginPage';
 
 import './App.css';
 
@@ -40,6 +41,7 @@ class App extends Component {
         <HeaderPage />
         <Route exact path="/" component={StartPage} />
         <Route exact path="/register" component={RegisterPage} />
+        <Route exact path="/login" component={LoginPage} />
       </div>
     );
   }

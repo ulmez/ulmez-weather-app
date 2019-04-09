@@ -6,7 +6,7 @@ class HeaderPage extends React.Component {
     render() {
         return (
             <header>
-                <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top nav-bk4">
+                <nav className="header-page navbar navbar-expand-md bg-dark navbar-dark fixed-top nav-bk4">
                     <a className="navbar-brand" href="#">UlmeZ Weather App</a>
                     
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
