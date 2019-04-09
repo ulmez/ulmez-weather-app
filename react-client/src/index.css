@@ -10,6 +10,7 @@ body {
   background: linear-gradient(to bottom right, #f7f4d6, #add5e2); /* Standard syntax */
   height: 100%;
   margin: 0;
+  padding-top: 70px;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }

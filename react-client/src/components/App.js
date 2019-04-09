@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import StartPage from './main/pages/startPage/StartPage';
+import HeaderPage from './main/pages/header/HeaderPage';
 
 import './App.css';
 
@@ -35,6 +36,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+        <HeaderPage />
         <Route exact path="/" component={StartPage} />
       </div>
     );
