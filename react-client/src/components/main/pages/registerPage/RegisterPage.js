@@ -17,13 +17,13 @@ class RegisterPage extends React.Component {
                         <input type="text" className="form-control" placeholder="Enter Firstname..." />
                         <label className="register-page label-sized-text mb-0 mt-3"><b>Surname</b></label>
                         <input type="text" className="form-control" placeholder="Enter Surname..." />
-                        <label className="register-page label-sized-text mb-0 mt-3"><b>Username</b></label>
-                        <input type="text" className="form-control" placeholder="Enter Username..." />
+                        <label className="register-page label-sized-text mb-0 mt-3"><b>Email</b></label>
+                        <input type="text" className="form-control" placeholder="Enter Email..." />
                         <label className="register-page label-sized-text mb-0 mt-3"><b>Password</b></label>
                         <input type="text" className="form-control" placeholder="Enter Password..." />
                         <label className="register-page label-sized-text mb-0 mt-3"><b>Enter password again</b></label>
                         <input type="text" className="form-control mb-2" placeholder="Enter Password again..." />
-                        <button className="register-page gradient-button btn btn-secondary btn-block" type="submit">Submit</button>
+                        <button className="register-page gradient-button btn btn-secondary btn-block" type="submit">Register</button>
                     </div>
                 </div>
             </div>
