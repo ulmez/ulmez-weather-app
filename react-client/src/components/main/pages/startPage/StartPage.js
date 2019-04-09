@@ -13,17 +13,17 @@ class StartPage extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm-9 col-md-7 col-lg-6 mx-auto jumbotron jumbotron-design">
+                    <div className="start-page col-sm-9 col-md-7 col-lg-6 mx-auto jumbotron jumbotron-design">
                         <p className="cursive-text text-center">
                             How's the weather in...
                         </p>
                         <p className="input-group input-group-md">
-                            <span className="input-group-addon btn-white position-location-text">
-                                <label className="label-sized-text"><b>Location:</b></label>
+                            <span className="start-page input-group-addon btn-white position-location-text">
+                                <label className="start-page label-sized-text"><b>Location:</b></label>
                             </span>
-                            <input type="text" className="form-control btn-white position-textfield" placeholder="Enter city..." />
-                            <span className="input-group-addon btn-white">
-                                <span className="fa fa-plus lime-green-text position-plus-icon"></span>
+                            <input type="text" className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
+                            <span className="start-page input-group-addon btn-white">
+                                <span className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
                             </span>
                         </p>
                     </div>
