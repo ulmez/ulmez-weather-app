@@ -105,9 +105,6 @@ class RegisterPage extends React.Component {
 
         if(registerUserCheck) {
             console.log("Registration success!");
-            this.setState({
-                successMessage: 'Successfully registered new user!'
-            });
 
             const userItem = {
                 firstname: this.state.firstName,
@@ -118,10 +115,9 @@ class RegisterPage extends React.Component {
 
             await axios.post('/users/user/register', userItem);
 
-            const loginItem = {
-                email: this.state.email,
-                password: this.state.password
-            };
+            this.setState({
+                successMessage: 'Successfully registered new user!'
+            });
 
             this.setState({
                 firstName: '',
@@ -130,6 +126,11 @@ class RegisterPage extends React.Component {
                 password: '',
                 passwordAgain: ''
             });
+
+            const loginItem = {
+                email: userItem.email,
+                password: userItem.password
+            };
 
             const userLoginObj = await axios.post('/users/user/login', loginItem);
 
