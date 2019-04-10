@@ -118,6 +118,25 @@ class RegisterPage extends React.Component {
 
             await axios.post('/users/user/register', userItem);
 
+            const loginItem = {
+                email: this.state.email,
+                password: this.state.password
+            };
+
+            this.setState({
+                firstName: '',
+                surName: '',
+                email: '',
+                password: '',
+                passwordAgain: ''
+            });
+
+            const userLoginObj = await axios.post('/users/user/login', loginItem);
+
+            console.log(userLoginObj.data.token);
+
+            localStorage.setItem('token', userLoginObj.data.token);
+
             setTimeout(() => {
                 this.setState({
                     successMessage: ''
