@@ -51,6 +51,55 @@ module.exports.register_user = function(req, res, next) {
     });
 }
 
+module.exports.login_user = (req, res, next) => {
+    User.find({
+        email: req.body.email
+    })
+    .select('+password')
+    .exec()
+    .then((users) => {
+        if(users.length < 1) {
+            return res.status(401).json({
+                message: 'Authorization failed'
+            });
+        }
+        
+        bcrypt.compare(req.body.password, users[0].password, (err, result) => {
+            if(err) {
+                return res.status(401).json({
+                    message: 'Authorization failed'
+                });
+            }
+            
+            if(result) {
+                const token = jwtBlacklist.sign({
+                    email: users[0].email,
+                    userId: users[0]._id
+                },
+                process.env.JWT_KEY,
+                {
+                    expiresIn: "1h"
+                });
+                
+                return res.status(200).json({
+                    message: 'Authorization successful',
+                    token: token
+                });
+            }
+
+            res.status(401).json({
+                message: 'Authorization failed'
+            });
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+}
+
 module.exports.authenticate = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
