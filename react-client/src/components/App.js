@@ -6,6 +6,7 @@ import StartPage from './main/pages/startPage/StartPage';
 import HeaderPage from './main/pages/header/HeaderPage';
 import RegisterPage from './main/pages/registerPage/RegisterPage';
 import LoginPage from './main/pages/loginPage/LoginPage';
+import ListPage from './main/listPage/ListPage';
 
 import './App.css';
 
@@ -42,6 +43,7 @@ class App extends Component {
         <Route exact path="/" component={StartPage} />
         <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/lists" component={ListPage} />
       </div>
     );
   }
