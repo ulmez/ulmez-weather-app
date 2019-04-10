@@ -6,13 +6,13 @@ var User = require('../models/User');
 
 module.exports.register_user = function(req, res, next) {
     User.find({
-        username: req.body.email
+        email: req.body.email
     })
     .exec()
     .then((user) => {
         if(user.length >= 1) {
             return res.status(409).json({
-                message: 'Username exists already'
+                message: 'Email exists already'
             });
         } else if(req.body.password.length < 6) {
             return res.status(409).json({
