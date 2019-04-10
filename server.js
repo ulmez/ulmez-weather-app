@@ -8,6 +8,7 @@ var logger = require('morgan');
 var multipart = require('connect-multiparty');
 
 var testsRouter = require('./routes/tests');
+var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(multipart());
 
 app.use('/tests', testsRouter);
+app.use('/users', usersRouter);
 
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('/react-client/build'));
