@@ -53,7 +53,7 @@ class HeaderPage extends React.Component {
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/lists">Lists</Link>
+                                {this.props.isLoggedIn && <Link className="nav-link" to="/lists">Lists</Link>}
                             </li>
                             <li className="nav-item">
                                 {this.props.isLoggedIn ? <Link className="nav-link" to="/" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
