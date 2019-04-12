@@ -112,3 +112,19 @@ module.exports.authenticate = (req, res, next) => {
         });
     }
 }
+
+module.exports.logout_user = (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        
+        jwtBlacklist.blacklist(token);
+        
+        res.status(200).json({
+            message: 'Token blacklisted'
+        });
+    } catch(err) {
+        res.status(401).json({
+            message: 'Authorization failed'
+        });
+    }
+};
