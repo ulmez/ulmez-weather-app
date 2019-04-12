@@ -1,18 +1,36 @@
 import React from 'react';
+import axios from 'axios';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { setLoggedIn, setLoggedOut } from '../../../../store/actions/headerAction';
+import { authenticationCheck } from '../../../helpers/users';
 
 import './HeaderPage.css';
 
 class HeaderPage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.logout = this.logout.bind(this);
+    }
+
+    componentDidMount() {
+        authenticationCheck(this);
+    }
+
+    logout() {
+        localStorage.removeItem('token');
+
+        this.props.setLoggedOut();
+    }
+
     render() {
         console.log(this.props.isLoggedIn);
         return (
             <header>
                 <nav className="header-page navbar navbar-expand-md bg-dark navbar-dark fixed-top nav-bk4">
-                    <a className="navbar-brand" href="/">UlmeZ Weather App</a>
+                    <Link className="navbar-brand" to="/">UlmeZ Weather App</Link>
                     
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                         <span className="navbar-toggler-icon"></span>
@@ -21,13 +39,13 @@ class HeaderPage extends React.Component {
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="/lists">Lists</a>
+                                <Link className="nav-link" to="/lists">Lists</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/login">Login</a>
+                                {this.props.isLoggedIn ? <Link className="nav-link" to="/" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/register">Register</a>
+                                <Link className="nav-link" to="/register">Register</Link>
                             </li>
                         </ul>
                     </div>

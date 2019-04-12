@@ -1,5 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { setLoggedIn, setLoggedOut } from '../../../../store/actions/headerAction';
 
 import './RegisterPage.css';
 
@@ -138,6 +142,8 @@ class RegisterPage extends React.Component {
 
             localStorage.setItem('token', userLoginObj.data.token);
 
+            this.props.setLoggedIn();
+
             setTimeout(() => {
                 this.setState({
                     successMessage: ''
@@ -186,4 +192,27 @@ class RegisterPage extends React.Component {
     }
 }
 
-export default RegisterPage;
+// export default RegisterPage;
+
+const mapStoreToProps = (store) => {
+    return {
+        isLoggedIn: store.hr.isLoggedIn,
+        // authorityGrade: store.hr.authorityGrade,
+        // seachedProducts: store.hr.seachedProducts,
+        // numberOfPages: store.hr.numberOfPages,
+        // userId: store.hr.userId
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setLoggedIn: () => dispatch(setLoggedIn()),
+        setLoggedOut: () => dispatch(setLoggedOut()),
+        // setSearchedProducts: (val) => dispatch(setSearchedProducts(val)),
+        // setNumberOfPages: (val) => dispatch(setNumberOfPages(val)),
+        // setUrlEndpoint: (val) => dispatch(setUrlEndpoint(val)),
+        // setAuthorityGrade: (val) => dispatch(setAuthorityGrade(val))
+    };
+};
+
+export default withRouter(connect(mapStoreToProps, mapDispatchToProps)(RegisterPage));
