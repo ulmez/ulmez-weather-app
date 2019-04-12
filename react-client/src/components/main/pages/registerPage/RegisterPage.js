@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { setLoggedIn, setLoggedOut } from '../../../../store/actions/headerAction';
@@ -120,15 +120,12 @@ class RegisterPage extends React.Component {
             await axios.post('/users/user/register', userItem);
 
             this.setState({
-                successMessage: 'Successfully registered new user!'
-            });
-
-            this.setState({
                 firstName: '',
                 surName: '',
                 email: '',
                 password: '',
-                passwordAgain: ''
+                passwordAgain: '',
+                successMessage: 'Successfully registered new user!'
             });
 
             const loginItem = {
