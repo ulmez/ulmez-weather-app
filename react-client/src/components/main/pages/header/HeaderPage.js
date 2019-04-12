@@ -20,9 +20,23 @@ class HeaderPage extends React.Component {
     }
 
     logout() {
-        localStorage.removeItem('token');
+        const token = localStorage.getItem('token');
 
-        this.props.setLoggedOut();
+        const tokenHeader = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+    
+        axios.post('/users/user/logout', null, tokenHeader)
+        .then((res) => {
+            console.log(res.data);
+            localStorage.removeItem('token');
+            this.props.setLoggedOut();
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
     render() {
@@ -55,26 +69,16 @@ class HeaderPage extends React.Component {
     }
 }
 
-// export default HeaderPage;
-
 const mapStoreToProps = (store) => {
     return {
-        isLoggedIn: store.hr.isLoggedIn,
-        // authorityGrade: store.hr.authorityGrade,
-        // seachedProducts: store.hr.seachedProducts,
-        // numberOfPages: store.hr.numberOfPages,
-        // userId: store.hr.userId
+        isLoggedIn: store.hr.isLoggedIn
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setLoggedIn: () => dispatch(setLoggedIn()),
-        setLoggedOut: () => dispatch(setLoggedOut()),
-        // setSearchedProducts: (val) => dispatch(setSearchedProducts(val)),
-        // setNumberOfPages: (val) => dispatch(setNumberOfPages(val)),
-        // setUrlEndpoint: (val) => dispatch(setUrlEndpoint(val)),
-        // setAuthorityGrade: (val) => dispatch(setAuthorityGrade(val))
+        setLoggedOut: () => dispatch(setLoggedOut())
     };
 };
 

@@ -192,26 +192,16 @@ class RegisterPage extends React.Component {
     }
 }
 
-// export default RegisterPage;
-
 const mapStoreToProps = (store) => {
     return {
-        isLoggedIn: store.hr.isLoggedIn,
-        // authorityGrade: store.hr.authorityGrade,
-        // seachedProducts: store.hr.seachedProducts,
-        // numberOfPages: store.hr.numberOfPages,
-        // userId: store.hr.userId
+        isLoggedIn: store.hr.isLoggedIn
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setLoggedIn: () => dispatch(setLoggedIn()),
-        setLoggedOut: () => dispatch(setLoggedOut()),
-        // setSearchedProducts: (val) => dispatch(setSearchedProducts(val)),
-        // setNumberOfPages: (val) => dispatch(setNumberOfPages(val)),
-        // setUrlEndpoint: (val) => dispatch(setUrlEndpoint(val)),
-        // setAuthorityGrade: (val) => dispatch(setAuthorityGrade(val))
+        setLoggedOut: () => dispatch(setLoggedOut())
     };
 };
 
