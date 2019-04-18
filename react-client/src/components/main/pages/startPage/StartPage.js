@@ -10,9 +10,9 @@ class StartPage extends Component {
 
         this.state = {
             city: '',
-            location: '',
-            current: '',
-            condition: '',
+            // location: '',
+            // current: '',
+            // condition: '',
             weathers: []
         };
 
@@ -70,7 +70,11 @@ class StartPage extends Component {
                 </div>
                 <div className="row">
                     {this.state.weathers.map((weather, index) => (
-                        <ListBox key={index} location={weather.location} />
+                        <ListBox key={index}
+                            location={weather.location}
+                            current={weather.current}
+                            condition={weather.condition}
+                        />
                     ))}
                 </div>
             </div>

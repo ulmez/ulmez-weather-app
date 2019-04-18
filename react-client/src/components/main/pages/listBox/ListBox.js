@@ -1,5 +1,6 @@
 import React from 'react';
 
+import celcius_icon from '../../../../images/c.svg';
 import './ListBox.css';
 
 class ListBox extends React.Component {
@@ -13,7 +14,7 @@ class ListBox extends React.Component {
                     </div>
                     <div className="d-flex align-items-center list-box background-inner box-height col-7 col-sm-5 col-md-7 col-lg-6 col-xl-7">
                         <div className="row">
-                        <div className="list-box celsius-design col-12 text-center">12 c</div>
+                        <div className="list-box celsius-design col-12 text-center">{this.props.current.temp_c} <img src={celcius_icon} className="align-top" /></div>
                         <div className="col-12 text-center">{this.props.location.name}, {this.props.location.country}</div>
                         </div>
                     </div>
