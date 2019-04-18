@@ -10,9 +10,6 @@ class StartPage extends Component {
 
         this.state = {
             city: '',
-            // location: '',
-            // current: '',
-            // condition: '',
             weathers: []
         };
 
@@ -42,6 +39,15 @@ class StartPage extends Component {
 
     handleChange(event) {
         this.setState({city: event.target.value});
+    }
+
+    deleteBox(index) {
+        console.log(index);
+        this.state.weathers.splice(index, 1);
+
+        this.setState({
+            weathers: this.state.weathers
+        });
     }
 
     render() {
@@ -74,6 +80,7 @@ class StartPage extends Component {
                             location={weather.location}
                             current={weather.current}
                             condition={weather.condition}
+                            deleteBox={() => this.deleteBox(index)}
                         />
                     ))}
                 </div>
