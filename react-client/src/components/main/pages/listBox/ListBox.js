@@ -1,6 +1,7 @@
 import React from 'react';
 
 import celcius_icon from '../../../../images/c.svg';
+import '../../../../fonts/meteocons-webfont/stylesheet.css';
 import './ListBox.css';
 
 class ListBox extends React.Component {
@@ -10,7 +11,7 @@ class ListBox extends React.Component {
                 <div className="row p-2 align-self-center">
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                     <div className="d-flex align-items-center list-box background-inner box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3">
-                        <span className="text-center list-box icon-design fa fa-mixcloud"></span>
+                        <span className="icon" data-icon="B"></span>
                     </div>
                     <div className="d-flex align-items-center list-box background-inner box-height col-7 col-sm-5 col-md-7 col-lg-6 col-xl-7">
                         <div className="row">
