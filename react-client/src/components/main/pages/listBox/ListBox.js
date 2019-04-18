@@ -57,7 +57,7 @@ class ListBox extends React.Component {
                         </div>
                     </div>
                     <div className="d-flex justify-content-end list-box background-inner box-height col-2 col-sm-1 col-md-2 col-lg-2 col-xl-2 p-0">
-                        <span onClick={this.props.deleteBox} className="list-box celsius-design fa fa-times-circle mt-1 mr-2"></span>
+                        <span onClick={this.props.deleteBox} className="list-box celsius-design cursor-pointer fa fa-times-circle mt-1 mr-2"></span>
                     </div>
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                 </div>
