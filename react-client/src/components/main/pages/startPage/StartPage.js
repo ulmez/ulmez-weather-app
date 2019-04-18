@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import './StartPage.css';
 import ListBox from '../listBox/ListBox';
@@ -50,6 +52,10 @@ class StartPage extends Component {
         });
     }
 
+    addWeatherList() {
+        console.log('Add weather list here...');
+    }
+
     render() {
         return (
             <div>
@@ -75,6 +81,9 @@ class StartPage extends Component {
                     </div>
                 </div>
                 <div className="row">
+                    {this.state.weathers.length > 0 && this.props.isLoggedIn && <div className="col-12" style={{border: '0px solid black'}}>
+                        <button onClick={this.addWeatherList} className="btn btn-info">Add list selection</button>
+                    </div>}
                     {this.state.weathers.map((weather, index) => (
                         <ListBox key={index}
                             location={weather.location}
@@ -89,4 +98,19 @@ class StartPage extends Component {
     }
 }
 
-export default StartPage;
+// export default StartPage;
+
+const mapStoreToProps = (store) => {
+    return {
+        isLoggedIn: store.hr.isLoggedIn
+    };
+};
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         setLoggedIn: () => dispatch(setLoggedIn()),
+//         setLoggedOut: () => dispatch(setLoggedOut())
+//     };
+// };
+
+export default withRouter(connect(mapStoreToProps, null)(StartPage));
