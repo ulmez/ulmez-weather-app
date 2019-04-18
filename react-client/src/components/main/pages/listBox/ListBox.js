@@ -14,7 +14,7 @@ class ListBox extends React.Component {
                     <div className="d-flex align-items-center list-box background-inner box-height col-7 col-sm-5 col-md-7 col-lg-6 col-xl-7">
                         <div className="row">
                         <div className="list-box celsius-design col-12 text-center">12 c</div>
-                        <div className="col-12 text-center">Paris, France</div>
+                        <div className="col-12 text-center">{this.props.location.name}, {this.props.location.country}</div>
                         </div>
                     </div>
                     <div className="d-flex justify-content-end list-box background-inner box-height col-2 col-sm-1 col-md-2 col-lg-2 col-xl-2 p-0">

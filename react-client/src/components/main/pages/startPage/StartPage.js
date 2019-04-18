@@ -1,9 +1,49 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import './StartPage.css';
 import ListBox from '../listBox/ListBox';
 
 class StartPage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            city: '',
+            location: '',
+            current: '',
+            condition: '',
+            weathers: []
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.searchCityName = this.searchCityName.bind(this);
+    }
+
+    searchCityName() {
+        axios.get(`/apixus/apixu/city/${this.state.city}`)
+        .then((result) => {
+            this.state.weathers.push({
+                location: result.data.stats.location,
+                current: result.data.stats.current,
+                condition: result.data.stats.current.condition
+            });
+
+            this.setState({
+                weathers: this.state.weathers
+            });
+
+            console.log(this.state.weathers);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    handleChange(event) {
+        this.setState({city: event.target.value});
+    }
+
     render() {
         return (
             <div>
@@ -21,20 +61,17 @@ class StartPage extends Component {
                             <span className="start-page input-group-addon btn-white position-location-text">
                                 <label className="start-page label-sized-text"><b>Location:</b></label>
                             </span>
-                            <input type="text" className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
+                            <input type="text" value={this.state.city} onChange={this.handleChange} className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
                             <span className="start-page input-group-addon btn-white">
-                                <span className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
+                                <span onClick={this.searchCityName} className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
                             </span>
                         </p>
                     </div>
                 </div>
                 <div className="row">
-                    <ListBox />
-                    <ListBox />
-                    <ListBox />
-                    <ListBox />
-                    <ListBox />
-                    <ListBox />
+                    {this.state.weathers.map((weather, index) => (
+                        <ListBox key={index} location={weather.location} />
+                    ))}
                 </div>
             </div>
         );
