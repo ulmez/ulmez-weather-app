@@ -19,6 +19,31 @@ class StartPage extends Component {
         this.searchCityName = this.searchCityName.bind(this);
     }
 
+    componentWillReceiveProps() {
+        console.log('route reload');
+        this.setState({
+            weathers: []
+        });
+    }
+
+    componentDidMount() {
+        if(this.props.location.state !== undefined) {
+            this.props.location.state.weathers.map(async (city) => {
+                const weather = await axios.get(`/apixus/apixu/city/${city}`);
+
+                this.state.weathers.push({
+                    location: weather.data.stats.location,
+                    current: weather.data.stats.current,
+                    condition: weather.data.stats.current.condition
+                });
+
+                this.setState({
+                    weathers: this.state.weathers
+                });
+            });
+        }
+    }
+
     searchCityName() {
         axios.get(`/apixus/apixu/city/${this.state.city}`)
         .then((result) => {
@@ -57,6 +82,9 @@ class StartPage extends Component {
     }
 
     render() {
+        console.log(this.props);
+        // console.log(this.props.location.state);
+        // console.log(this.state.weathers);
         return (
             <div>
                 <div className="row">

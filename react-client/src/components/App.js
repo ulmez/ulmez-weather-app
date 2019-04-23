@@ -41,6 +41,7 @@ class App extends Component {
       <div className="container">
         <HeaderPage />
         <Route exact path="/" component={StartPage} />
+        <Route exact path="/list/:id" component={StartPage} />
         <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/lists" component={ListPage} />

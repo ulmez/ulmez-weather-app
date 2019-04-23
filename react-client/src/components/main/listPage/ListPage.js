@@ -1,18 +1,34 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import './ListPage.css';
 
 class ListPage extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            weatherLists: []
+        };
     }
 
     componentDidMount() {
-        // axios.ge
+        axios.post('/users/user', {"id": "5cb9911870e9eafa5264d13b"})
+        .then((user) => {
+            console.log(user.data);
+
+            this.setState({
+                weatherLists: user.data.message[0].weatherLists
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     render() {
+        console.log(this.state.weatherLists);
         return (
             <div>
                 <div className="row">
@@ -26,33 +42,11 @@ class ListPage extends React.Component {
                             <div className="col-12 text-center">
                                 <label className="list-page label-sized-text"><b>Lists</b></label>
                             </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-18</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-19</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-20</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-21</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-22</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-23</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-24</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-25</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-26</a>
-                            </div>
+                            {this.state.weatherLists.map((list, index) => (
+                                <div className="col-4" key={list.listId}>
+                                    <Link to={{pathname: '/', state: {weathers: list.weathers}}}>Weatherlist {index + 1}</Link>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
