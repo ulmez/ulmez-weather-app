@@ -7,6 +7,7 @@ router.post('/user/register', userController.register_user);
 router.post('/user/login', userController.login_user);
 router.post('/user/auth', userController.authenticate);
 router.post('/user/logout', userController.logout_user);
+router.post('/user/editlist', userController.edit_list);
 router.post('/user/addlist', userController.add_list);
 
 module.exports = router;

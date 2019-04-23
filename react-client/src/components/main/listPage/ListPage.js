@@ -13,18 +13,31 @@ class ListPage extends React.Component {
         };
     }
 
-    componentDidMount() {
-        axios.post('/users/user', {"id": "5cb9911870e9eafa5264d13b"})
-        .then((user) => {
-            console.log(user.data);
+    async componentDidMount() {
+        if(localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+    
+            const tokenHeader = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+    
+            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+            console.log(userAuth.data.userId);
 
-            this.setState({
-                weatherLists: user.data.message[0].weatherLists
+            axios.post('/users/user', {id: userAuth.data.userId})
+            .then((user) => {
+                console.log(user.data);
+
+                this.setState({
+                    weatherLists: user.data.message[0].weatherLists
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        }
     }
 
     render() {

@@ -17,6 +17,7 @@ class StartPage extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.searchCityName = this.searchCityName.bind(this);
+        this.addWeatherList = this.addWeatherList.bind(this);
     }
 
     componentWillReceiveProps() {
@@ -57,7 +58,7 @@ class StartPage extends Component {
                 weathers: this.state.weathers
             });
 
-            console.log(this.state.weathers);
+            // console.log(this.state.weathers);
         })
         .catch((error) => {
             console.log(error);
@@ -77,12 +78,41 @@ class StartPage extends Component {
         });
     }
 
-    addWeatherList() {
-        console.log('Add weather list here...');
+    async addWeatherList() {
+        if(localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+    
+            const tokenHeader = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+    
+            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+            console.log(userAuth.data.userId);
+
+            // console.log('**************');
+            // console.log(this.state.weathers);
+            // console.log('**************');
+            const nameList = [];
+
+            this.state.weathers.map((weather) => {
+                // console.log(weather.location.name);
+                nameList.push(weather.location.name);
+            });
+            console.log(nameList);
+
+            const addItem = {
+                id: userAuth.data.userId,
+                weathers: nameList
+            };
+
+            await axios.post('/users/user/addlist', addItem);
+        }
     }
 
     render() {
-        console.log(this.props);
+        // console.log(this.props);
         // console.log(this.props.location.state);
         // console.log(this.state.weathers);
         return (

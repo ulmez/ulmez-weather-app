@@ -145,7 +145,7 @@ module.exports.logout_user = (req, res, next) => {
     }
 };
 
-module.exports.add_list = (req, res, next) => {
+module.exports.edit_list = (req, res, next) => {
     const mongoose = require('mongoose');
     // const listId = mongoose.Types.ObjectId();
     // const userObj = new User();
@@ -162,6 +162,39 @@ module.exports.add_list = (req, res, next) => {
             $set:
             {
                 'weatherLists.$.weathers': arrlistItem
+            }
+        }
+    )
+    .exec()
+    .then(function(result) {
+        res.json({
+            message: result
+        });
+    })
+    .catch(function(err) {
+        res.json({
+            message: err
+        });
+    });
+};
+
+module.exports.add_list = (req, res, next) => {
+    const mongoose = require('mongoose');
+    const id = mongoose.Types.ObjectId(req.body.id);
+    const listId = mongoose.Types.ObjectId();
+    const arrlistItem = req.body.weathers;
+
+    User.update(
+        {
+            _id: id
+        },
+        {
+            $push:
+            {
+                weatherLists: {
+                    listId: listId,
+                    weathers: arrlistItem
+                }
             }
         }
     )
