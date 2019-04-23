@@ -4,6 +4,22 @@ var bcrypt = require('bcrypt');
 
 var User = require('../models/User');
 
+module.exports.get_user = function(req, res, next) {
+    User.find({
+        _id: req.body.id
+    })
+    .exec()
+    .then((user) => {
+        console.log(user);
+
+        res.status(200).json({
+            message: user
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 module.exports.register_user = function(req, res, next) {
     User.find({
         email: req.body.email

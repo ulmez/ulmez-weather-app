@@ -1,8 +1,17 @@
 import React from 'react';
+import axios from 'axios';
 
 import './ListPage.css';
 
 class ListPage extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        // axios.ge
+    }
+
     render() {
         return (
             <div>
