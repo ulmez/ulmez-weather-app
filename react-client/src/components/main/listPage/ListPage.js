@@ -57,7 +57,7 @@ class ListPage extends React.Component {
                             </div>
                             {this.state.weatherLists.map((list, index) => (
                                 <div className="col-4" key={list.listId}>
-                                    <Link to={{pathname: '/', state: {weathers: list.weathers}}}>Weatherlist {index + 1}</Link>
+                                    <Link to={{pathname: '/', state: {weathers: list.weathers, listId: list.listId}}}>Weatherlist {index + 1}</Link>
                                 </div>
                             ))}
                         </div>

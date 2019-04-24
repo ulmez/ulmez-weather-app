@@ -3,6 +3,8 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import weathers from '../../../../inits/init';
+
 import './StartPage.css';
 import ListBox from '../listBox/ListBox';
 
@@ -20,6 +22,10 @@ class StartPage extends Component {
         this.addWeatherList = this.addWeatherList.bind(this);
     }
 
+    componentWillUnmount() {
+        console.log('Unmount');
+    }
+
     componentWillReceiveProps() {
         console.log('route reload');
         this.setState({
@@ -29,6 +35,11 @@ class StartPage extends Component {
 
     componentDidMount() {
         if(this.props.location.state !== undefined) {
+            console.log('********');
+            console.log(this.props.location.state.listId);
+            console.log(this.props.location.state.weathers);
+            console.log('********');
+
             this.props.location.state.weathers.map(async (city) => {
                 const weather = await axios.get(`/apixus/apixu/city/${city}`);
 
@@ -87,33 +98,136 @@ class StartPage extends Component {
                     'Authorization': 'Bearer ' + token
                 }
             };
-    
+
             const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
             console.log(userAuth.data.userId);
 
-            // console.log('**************');
-            // console.log(this.state.weathers);
-            // console.log('**************');
             const nameList = [];
 
             this.state.weathers.map((weather) => {
-                // console.log(weather.location.name);
                 nameList.push(weather.location.name);
             });
+
+            console.log('********');
             console.log(nameList);
+            console.log('********');
 
-            const addItem = {
-                id: userAuth.data.userId,
-                weathers: nameList
-            };
+            if(this.props.location.state !== undefined) {
+                const editItem = {
+                    id: userAuth.data.userId,
+                    listId: this.props.location.state.listId,
+                    weathers: nameList
+                };
 
-            await axios.post('/users/user/addlist', addItem);
+                await axios.post('/users/user/editlist', editItem);
+            } else {
+                const addItem = {
+                    id: userAuth.data.userId,
+                    weathers: nameList
+                };
+
+                await axios.post('/users/user/addlist', addItem);
+            }
 
             this.props.history.push("/lists");
         }
     }
 
+    colorOfTemperature(arrRGBColor1, arrRGBColor2, numberOfGrades, temperature) {
+        let checkAllowedTemperature;
+    
+        // Block to make span of colors restricted to numberOfGrades parameter.
+        // If a city has temperature 33 and numberOfGrades are declared to 30,
+        // temperature will be changed to 30 so the color range will be intact.
+        if (temperature > numberOfGrades) {
+            checkAllowedTemperature = numberOfGrades;
+        } else if (temperature < -numberOfGrades) {
+            checkAllowedTemperature = -numberOfGrades;
+        } else {
+            checkAllowedTemperature = temperature;
+        }
+    
+        let r1, g1, b1, r2, g2, b2;
+    
+        // RGB color for start of range
+        r1 = arrRGBColor1[0];
+        g1 = arrRGBColor1[1];
+        b1 = arrRGBColor1[2];
+    
+        // RGB color for end of range
+        r2 = arrRGBColor2[0];
+        g2 = arrRGBColor2[1];
+        b2 = arrRGBColor2[2];
+    
+        let stepR, stepG, stepB;
+    
+        // Block to get the difference between starting
+        // RGB color and ending RGB color even if the
+        // starting color has a lower or higher value.
+        if (r1 < r2) {
+            stepR = (r2 - r1) / numberOfGrades;
+        } else if (r1 > r2) {
+            stepR = -(r1 - r2) / numberOfGrades;
+        } else {
+            stepR = 0;
+        }
+    
+        if (g1 < g2) {
+            stepG = (g2 - g1) / numberOfGrades;
+        } else if (g1 > g2) {
+            stepG = -(g1 - g2) / numberOfGrades;
+        } else {
+            stepG = 0;
+        }
+    
+        if (b1 < b2) {
+            stepB = (b2 - b1) / numberOfGrades;
+        } else if (b1 > b2) {
+            stepB = -(b1 - b2) / numberOfGrades;
+        } else {
+            stepB = 0;
+        }
+    
+        // Change a negative value to a positive value
+        if (checkAllowedTemperature < 0) {
+            checkAllowedTemperature = -checkAllowedTemperature;
+        }
+    
+        // Sets the RGB color to be used for the specific temperature
+        let tempR = r1 + Math.floor(stepR * checkAllowedTemperature);
+        let tempG = g1 + Math.floor(stepG * checkAllowedTemperature);
+        let tempB = b1 + Math.floor(stepB * checkAllowedTemperature);
+    
+        return [tempR, tempG, tempB];
+    }
+
+    getRGBTemperature(temperature) {
+        if (temperature >= 0) {
+            return this.colorOfTemperature([0, 158, 229], [191, 64, 0], 30, temperature);
+		} else {
+            return this.colorOfTemperature([0, 158, 229], [40, 0, 102], 30, temperature);
+		}
+    }
+
+    getWeatherIcon(is_day, code) {
+        if(is_day === 1) {
+            for(let i = 0; i < weathers.types.length; i++) {
+                if(weathers.types[i].code === code) {
+                    return weathers.types[i].night_or_day_icon[1];
+                }
+            }
+        } else {
+            for(let i = 0; i < weathers.types.length; i++) {
+                if(weathers.types[i].code === code) {
+                    return weathers.types[i].night_or_day_icon[0];
+                }
+            }
+        }
+    }
+
     render() {
+        // console.log(this.getWeatherIcon(1, 1000));
+        // console.log(this.getRGBTemperature(10));
         // console.log(this.props);
         // console.log(this.props.location.state);
         // console.log(this.state.weathers);
@@ -141,14 +255,16 @@ class StartPage extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    {this.state.weathers.length > 0 && this.props.isLoggedIn && <div className="col-12" style={{border: '0px solid black'}}>
-                        <button onClick={this.addWeatherList} className="btn btn-info">Add list selection</button>
+                    {this.state.weathers.length > 0 && this.props.isLoggedIn && <div className="col-12">
+                        {this.props.location.state !== undefined ? <button onClick={this.addWeatherList} className="btn btn-info">Edit list selection</button> : <button onClick={this.addWeatherList} className="btn btn-info">Add list selection</button>}
                     </div>}
                     {this.state.weathers.map((weather, index) => (
                         <ListBox key={index}
                             location={weather.location}
                             current={weather.current}
                             condition={weather.condition}
+                            RGBTemperature={this.getRGBTemperature(weather.current.temp_c)}
+                            weatherIcon={this.getWeatherIcon(weather.current.is_day, weather.condition.code)}
                             deleteBox={() => this.deleteBox(index)}
                         />
                     ))}
