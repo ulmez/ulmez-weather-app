@@ -108,6 +108,8 @@ class StartPage extends Component {
             };
 
             await axios.post('/users/user/addlist', addItem);
+
+            this.props.history.push("/lists");
         }
     }
 
