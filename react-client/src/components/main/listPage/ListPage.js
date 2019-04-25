@@ -40,8 +40,38 @@ class ListPage extends React.Component {
         }
     }
 
-    deleteList(listId) {
-        console.log('Delete ' + listId);
+    async deleteList(listId) {
+        if(localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+    
+            const tokenHeader = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+
+            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+            console.log(userAuth.data.userId);
+
+            axios.post('/users/user/deletelist', {
+                id: userAuth.data.userId,
+                listId: listId
+            })
+            .then(async (list) => {
+                console.log(list.data);
+
+                const user = await axios.post('/users/user', {id: userAuth.data.userId});
+
+                console.log(user.data.message[0].weatherLists);
+
+                this.setState({
+                    weatherLists: user.data.message[0].weatherLists
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     render() {
