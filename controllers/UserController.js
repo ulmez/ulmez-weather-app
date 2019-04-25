@@ -1,6 +1,7 @@
 var jwt = require('jsonwebtoken');
 var jwtBlacklist = require('jwt-blacklist')(jwt);
 var bcrypt = require('bcrypt');
+var mongoose = require('mongoose');
 
 var User = require('../models/User');
 
@@ -146,7 +147,7 @@ module.exports.logout_user = (req, res, next) => {
 };
 
 module.exports.edit_list = (req, res, next) => {
-    const mongoose = require('mongoose');
+    // const mongoose = require('mongoose');
     // const listId = mongoose.Types.ObjectId();
     // const userObj = new User();
     const id = mongoose.Types.ObjectId(req.body.id);
@@ -179,7 +180,7 @@ module.exports.edit_list = (req, res, next) => {
 };
 
 module.exports.add_list = (req, res, next) => {
-    const mongoose = require('mongoose');
+    // const mongoose = require('mongoose');
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId();
     const arrlistItem = req.body.weathers;
@@ -207,6 +208,36 @@ module.exports.add_list = (req, res, next) => {
     .catch(function(err) {
         res.json({
             message: err
+        });
+    });
+};
+
+module.exports.delete_list = (req, res, next) => {
+    // const mongoose = require('mongoose');
+    const id = mongoose.Types.ObjectId(req.body.id);
+    const listId = mongoose.Types.ObjectId(req.body.listId);
+
+    User.update( 
+        {
+            _id: id
+        },
+        {
+            $pull: {
+                weatherLists: {
+                    listId: listId
+                }
+            }
+        }
+    )
+    .exec()
+    .then(function(result) {
+        res.json({
+            message: result
+        });
+    })
+    .catch(function(error) {
+        res.json({
+            message: error
         });
     });
 };

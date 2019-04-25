@@ -9,5 +9,6 @@ router.post('/user/auth', userController.authenticate);
 router.post('/user/logout', userController.logout_user);
 router.post('/user/editlist', userController.edit_list);
 router.post('/user/addlist', userController.add_list);
+router.post('/user/deletelist', userController.delete_list);
 
 module.exports = router;
