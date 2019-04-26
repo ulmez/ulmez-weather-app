@@ -5,16 +5,15 @@ import React from 'react';
 import celcius_icon from '../../../../images/c.svg';
 import '../../../../fonts/meteocons-webfont/stylesheet.css';
 import './ListBox.css';
+import $ from 'jquery';
 
 class ListBox extends React.Component {
-    // constructor(props) {
-    //     super(props);
+    constructor(props) {
+        super(props);
 
-    //     // this.state = {
-    //     //     setWeatherIcon: '',
-    //     //     RGBColor: ''
-    //     // };
-    // }
+        this.popupWindow = this.popupWindow.bind(this);
+        this.hidePopupWindow = this.hidePopupWindow.bind(this);
+    }
 
     // componentDidMount() {
     //     console.log(this.props.location);
@@ -125,16 +124,33 @@ class ListBox extends React.Component {
 	// 	}
     // }
 
+    popupWindow(id) {
+        const pos = $('#listCard' + id).position();
+        const relX = window.event.pageX - pos.left;
+        const hiddenPopup = document.getElementById("hiddenPopup" + id);
+
+        hiddenPopup.style.display = "block";
+        hiddenPopup.style.left = (relX + 15) + "px";
+    }
+
+    hidePopupWindow(id) {
+        const hiddenPopup = document.getElementById("hiddenPopup" + id);
+
+        hiddenPopup.style.display = "none";
+    }
+
     render() {
         // console.log('*********');
         // console.log('*********');
+        // console.log(this.state.showPopup);
+        // console.log(this.props);
         // console.log(this.state.RGBColor);
         // console.log('*********');
         // console.log('*********');
         // console.log(this.props.RGBTemperature);
         // console.log(this.props.weatherIcon);
         return (
-            <div className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <div id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseOut={() => this.hidePopupWindow(this.props.getIndex)} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4">
                 <div className="row p-2 align-self-center">
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                     <div className="d-flex align-items-center list-box box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
@@ -150,6 +166,9 @@ class ListBox extends React.Component {
                         <span onClick={this.props.deleteBox} className="list-box celsius-design cursor-pointer fa fa-times-circle mt-1 mr-2"></span>
                     </div>
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
+                </div>
+                <div id={"hiddenPopup" + this.props.getIndex} style={{display: 'none', position: 'absolute', width: '150px', height: '200px', backgroundColor: 'red', top: '-100px', zIndex: '9999'}}>
+                    Popup window {this.props.getIndex}
                 </div>
             </div>
         );

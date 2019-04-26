@@ -292,6 +292,7 @@ class StartPage extends Component {
                     </div>}
                     {this.state.weathers.map((weather, index) => (
                         <ListBox key={index}
+                            getIndex={index}
                             location={weather.location}
                             current={weather.current}
                             condition={weather.condition}
