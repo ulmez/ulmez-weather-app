@@ -92,7 +92,7 @@ class ListPage extends React.Component {
                             {this.state.weatherLists.map((list, index) => (
                                 <div className="col-4" key={list.listId}>
                                     <span onClick={() => this.deleteList(list.listId)} className="text-danger fa fa-times-circle mt-1 mr-2"></span>
-                                    <Link to={{pathname: '/', state: {weathers: list.weathers, listId: list.listId}}}>Weatherlist {index + 1}</Link>
+                                    <Link to={{pathname: '/', state: {weathers: list.weathers, listId: list.listId, listName: list.listName}}}>{list.listName}</Link>
                                 </div>
                             ))}
                         </div>

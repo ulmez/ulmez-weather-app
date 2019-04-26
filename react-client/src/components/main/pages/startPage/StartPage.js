@@ -14,10 +14,12 @@ class StartPage extends Component {
 
         this.state = {
             city: '',
+            listName: '',
             weathers: []
         };
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeCity = this.handleChangeCity.bind(this);
+        this.handleChangeListName = this.handleChangeListName.bind(this);
         this.searchCityName = this.searchCityName.bind(this);
         this.addWeatherList = this.addWeatherList.bind(this);
     }
@@ -29,6 +31,7 @@ class StartPage extends Component {
     componentWillReceiveProps() {
         console.log('route reload');
         this.setState({
+            listName: '',
             weathers: []
         });
     }
@@ -37,6 +40,7 @@ class StartPage extends Component {
         if(this.props.location.state !== undefined) {
             console.log('********');
             console.log(this.props.location.state.listId);
+            console.log(this.props.location.state.listName);
             console.log(this.props.location.state.weathers);
             console.log('********');
 
@@ -50,6 +54,7 @@ class StartPage extends Component {
                 });
 
                 this.setState({
+                    listName: this.props.location.state.listName,
                     weathers: this.state.weathers
                 });
             });
@@ -76,8 +81,16 @@ class StartPage extends Component {
         });
     }
 
-    handleChange(event) {
-        this.setState({city: event.target.value});
+    handleChangeCity(event) {
+        this.setState({
+            city: event.target.value
+        });
+    }
+
+    handleChangeListName(event) {
+        this.setState({
+            listName: event.target.value
+        });
     }
 
     deleteBox(index) {
@@ -116,6 +129,7 @@ class StartPage extends Component {
                 const editItem = {
                     id: userAuth.data.userId,
                     listId: this.props.location.state.listId,
+                    listName: this.state.listName,
                     weathers: nameList
                 };
 
@@ -123,6 +137,7 @@ class StartPage extends Component {
             } else {
                 const addItem = {
                     id: userAuth.data.userId,
+                    listName: this.state.listName,
                     weathers: nameList
                 };
 
@@ -247,7 +262,7 @@ class StartPage extends Component {
                             <span className="start-page input-group-addon btn-white position-location-text">
                                 <label className="start-page label-sized-text"><b>Location:</b></label>
                             </span>
-                            <input type="text" value={this.state.city} onChange={this.handleChange} className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
+                            <input type="text" value={this.state.city} onChange={this.handleChangeCity} className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
                             <span className="start-page input-group-addon btn-white">
                                 <span onClick={this.searchCityName} className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
                             </span>
@@ -256,7 +271,24 @@ class StartPage extends Component {
                 </div>
                 <div className="row">
                     {this.state.weathers.length > 0 && this.props.isLoggedIn && <div className="col-12">
-                        {this.props.location.state !== undefined ? <button onClick={this.addWeatherList} className="btn btn-info">Edit list selection</button> : <button onClick={this.addWeatherList} className="btn btn-info">Add list selection</button>}
+                        <div className="row">
+                            <div className="col col-sm-9 col-md-7 col-lg-6 col-xl-6 mx-auto">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <label className="start-page label-sized-text mb-0"><b>List name</b></label>
+                                    </div>
+                                    <div className="col-7">
+                                        <input type="text" value={this.state.listName} onChange={this.handleChangeListName} className="form-control" placeholder="Enter list name..." />
+                                    </div>
+                                    <div className="col-5 pl-0">
+                                        {this.props.location.state !== undefined ? <button onClick={this.addWeatherList} className="btn btn-info btn-block">Edit list</button> : <button onClick={this.addWeatherList} className="btn btn-info btn-block">Add list</button>}
+                                    </div>
+                                </div>
+                                {this.props.location.state && <div className="col-12 text-center mt-4">
+                                    <h4>{this.props.location.state.listName}</h4>
+                                </div>}
+                            </div>
+                        </div>
                     </div>}
                     {this.state.weathers.map((weather, index) => (
                         <ListBox key={index}

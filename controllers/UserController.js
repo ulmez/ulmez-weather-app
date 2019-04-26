@@ -152,6 +152,7 @@ module.exports.edit_list = (req, res, next) => {
     // const userObj = new User();
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId(req.body.listId);
+    const listName = req.body.listName;
     const arrlistItem = req.body.weathers;
 
     User.update(
@@ -162,6 +163,7 @@ module.exports.edit_list = (req, res, next) => {
         {
             $set:
             {
+                'weatherLists.$.listName': listName,
                 'weatherLists.$.weathers': arrlistItem
             }
         }
@@ -183,6 +185,7 @@ module.exports.add_list = (req, res, next) => {
     // const mongoose = require('mongoose');
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId();
+    const listName = req.body.listName;
     const arrlistItem = req.body.weathers;
 
     User.update(
@@ -194,6 +197,7 @@ module.exports.add_list = (req, res, next) => {
             {
                 weatherLists: {
                     listId: listId,
+                    listName: listName,
                     weathers: arrlistItem
                 }
             }
