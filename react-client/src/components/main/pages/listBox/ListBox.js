@@ -12,8 +12,19 @@ class ListBox extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            width: 0,
+            height: 0
+        };
+
         this.popupWindow = this.popupWindow.bind(this);
         this.hidePopupWindow = this.hidePopupWindow.bind(this);
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
     }
 
     // componentDidMount() {
@@ -126,32 +137,48 @@ class ListBox extends React.Component {
     // }
 
     popupWindow(id) {
-        const pos = $('#listCard' + id).position();
-        const relX = window.event.pageX - pos.left;
-        const hiddenPopup = document.getElementById("hiddenPopup" + id);
+        if(window.innerWidth >= 576) {
+            console.log(1);
+            const pos = $('#listCard' + id).position();
+            const relX = window.event.pageX - pos.left;
+            const hiddenPopup = document.getElementById("hiddenPopup" + id);
 
-        hiddenPopup.style.display = "block";
-        hiddenPopup.style.left = (relX + 15) + "px";
+            hiddenPopup.style.display = "block";
+            hiddenPopup.style.left = (relX + 15) + "px";
+        }
     }
 
     hidePopupWindow(id) {
-        const hiddenPopup = document.getElementById("hiddenPopup" + id);
+        if(window.innerWidth >= 576) {
+            console.log(0);
+            const hiddenPopup = document.getElementById("hiddenPopup" + id);
 
-        hiddenPopup.style.display = "none";
+            hiddenPopup.style.display = "none";
+        }
     }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+      }
+
+    // preventJump(e) {
+    //     e.preventDefault();
+    // }
 
     render() {
         console.log('*********');
         console.log('*********');
+        console.log(this.state.width);
+        console.log(this.state.height);
         // console.log(this.state.showPopup);
-        console.log(this.props);
+        // console.log(this.props);
         // console.log(this.state.RGBColor);
         console.log('*********');
         console.log('*********');
         // console.log(this.props.RGBTemperature);
         // console.log(this.props.weatherIcon);
         return (
-            <div id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseOut={() => this.hidePopupWindow(this.props.getIndex)} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseOut={() => this.hidePopupWindow(this.props.getIndex)} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4">
                 <div className="row p-2 align-self-center">
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                     <div className="d-flex align-items-center list-box box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
@@ -172,7 +199,7 @@ class ListBox extends React.Component {
                     <table className="table table-sm table-striped table-dark">
                         <thead>
                             <tr>
-                                <th scope="col" colspan="2">Weather statistics</th>
+                                <th scope="col" colSpan="2">Weather statistics</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -223,6 +250,91 @@ class ListBox extends React.Component {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Button to Open the Modal */}
+                {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target={"#myModal" + this.props.getIndex}>
+                Open modal
+                </button> */}
+
+                {/* The Modal */}
+                <div className="modal fade" id={"myModal" + this.props.getIndex}>
+                    <div className="modal-dialog modal-dialog-centered">
+                    <table className="table table-sm table-striped table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" colSpan="2">Weather statistics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>City</td>
+                                        <td>{this.props.location.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Country</td>
+                                        <td>{this.props.location.country}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date</td>
+                                        <td>{moment(this.props.location.localtime).format('YYYY-MM-DD')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Time</td>
+                                        <td>{moment(this.props.location.localtime).format('HH:mm')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weather</td>
+                                        <td>{this.props.current.condition.text}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temperature</td>
+                                        <td>{this.props.current.temp_c}<img src={celcius_icon} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Feels like</td>
+                                        <td>{this.props.current.feelslike_c}<img src={celcius_icon} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Humidity</td>
+                                        <td>{this.props.current.humidity} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wind direction</td>
+                                        <td>{this.props.current.wind_dir}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wind degree</td>
+                                        <td>{this.props.current.wind_degree} °</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wind force</td>
+                                        <td>{this.props.current.wind_kph} kph</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {/* <div className="modal-content"> */}
+                        
+
+                        {/* Modal Header */}
+                        {/* <div className="modal-header">
+                            <h4 className="modal-title">Modal Heading</h4>
+                            <button type="button" className="close" data-dismiss="modal">&times;</button>
+                        </div> */}
+
+                        {/* Modal body */}
+                        {/* <div className="modal-body">
+                            
+                        </div> */}
+
+                        {/* Modal footer */}
+                        {/* <div className="modal-footer">
+                            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div> */}
+
+                        {/* </div> */}
+                    </div>
+                </div>
+
             </div>
         );
     }

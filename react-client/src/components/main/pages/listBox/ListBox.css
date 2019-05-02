@@ -32,3 +32,15 @@
     top: -300px;
     z-index: 9999;
 }
+
+.modal-dialog {
+    opacity: 0.9;
+}
+
+/* .modal-content {
+    opacity: 0;
+} */
+
+/* .modal-body {
+    opacity: 0.4;
+} */
