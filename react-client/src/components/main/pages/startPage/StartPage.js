@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 
 import weathers from '../../../../inits/init';
 
@@ -95,11 +96,19 @@ class StartPage extends Component {
 
     deleteBox(index) {
         console.log(index);
-        this.state.weathers.splice(index, 1);
+        const listCard = $('#listCard' + index);
 
-        this.setState({
-            weathers: this.state.weathers
-        });
+        listCard.fadeOut(500);
+
+        setTimeout(() => {
+            this.state.weathers.splice(index, 1);
+
+            this.setState({
+                weathers: this.state.weathers
+            });
+
+            listCard.fadeIn(0);
+        }, 400);
     }
 
     async addWeatherList() {
@@ -245,7 +254,7 @@ class StartPage extends Component {
         // console.log(this.getRGBTemperature(10));
         // console.log(this.props);
         // console.log(this.props.location.state);
-        // console.log(this.state.weathers);
+        console.log(this.state.weathers);
         return (
             <div>
                 <div className="row">

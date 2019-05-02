@@ -37,10 +37,108 @@
     opacity: 0.9;
 }
 
-/* .modal-content {
-    opacity: 0;
-} */
+.list-box.fade-in-list-box {
+    animation: fadeInListBox ease 0.5s;
+    -webkit-animation: fadeInListBox ease 0.5s;
+    -moz-animation: fadeInListBox ease 0.5s;
+    -o-animation: fadeInListBox ease 0.5s;
+    -ms-animation: fadeInListBox ease 0.5s;
+  }
 
-/* .modal-body {
-    opacity: 0.4;
-} */
+  @keyframes fadeInListBox{
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-moz-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-webkit-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-o-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-ms-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+
+  .list-box.fade-out-list-box {
+    animation: fadeOutListBox ease 0.5s;
+    -webkit-animation: fadeOutListBox ease 0.5s;
+    -moz-animation: fadeOutListBox ease 0.5s;
+    -o-animation: fadeOutListBox ease 0.5s;
+    -ms-animation: fadeOutListBox ease 0.5s;
+  }
+
+  @keyframes fadeOutListBox{
+    0% {
+      opacity:1;
+    }
+    100% {
+      opacity:0;
+    }
+  }
+  
+  @-moz-keyframes fadeOutListBox {
+    0% {
+      opacity:1;
+    }
+    100% {
+      opacity:0;
+    }
+  }
+  
+  @-webkit-keyframes fadeOutListBox {
+    0% {
+      opacity:1;
+    }
+    100% {
+      opacity:0;
+    }
+  }
+  
+  @-o-keyframes fadeOutListBox {
+    0% {
+      opacity:1;
+    }
+    100% {
+      opacity:0;
+    }
+  }
+  
+  @-ms-keyframes fadeOutListBox {
+    0% {
+      opacity:1;
+    }
+    100% {
+      opacity:0;
+    }
+  }
