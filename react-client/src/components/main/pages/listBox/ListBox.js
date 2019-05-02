@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 // import weathers from '../../../../inits/init';
 
@@ -140,13 +141,13 @@ class ListBox extends React.Component {
     }
 
     render() {
-        // console.log('*********');
-        // console.log('*********');
+        console.log('*********');
+        console.log('*********');
         // console.log(this.state.showPopup);
-        // console.log(this.props);
+        console.log(this.props);
         // console.log(this.state.RGBColor);
-        // console.log('*********');
-        // console.log('*********');
+        console.log('*********');
+        console.log('*********');
         // console.log(this.props.RGBTemperature);
         // console.log(this.props.weatherIcon);
         return (
@@ -167,8 +168,60 @@ class ListBox extends React.Component {
                     </div>
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                 </div>
-                <div id={"hiddenPopup" + this.props.getIndex} style={{display: 'none', position: 'absolute', width: '150px', height: '200px', backgroundColor: 'red', top: '-100px', zIndex: '9999'}}>
-                    Popup window {this.props.getIndex}
+                <div id={"hiddenPopup" + this.props.getIndex} className="list-box hidden-popup">
+                    <table className="table table-sm table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="2">Weather statistics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>City</td>
+                                <td>{this.props.location.name}</td>
+                            </tr>
+                            <tr>
+                                <td>Country</td>
+                                <td>{this.props.location.country}</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>{moment(this.props.location.localtime).format('YYYY-MM-DD')}</td>
+                            </tr>
+                            <tr>
+                                <td>Time</td>
+                                <td>{moment(this.props.location.localtime).format('HH:mm')}</td>
+                            </tr>
+                            <tr>
+                                <td>Weather</td>
+                                <td>{this.props.current.condition.text}</td>
+                            </tr>
+                            <tr>
+                                <td>Temperature</td>
+                                <td>{this.props.current.temp_c}<img src={celcius_icon} /></td>
+                            </tr>
+                            <tr>
+                                <td>Feels like</td>
+                                <td>{this.props.current.feelslike_c}<img src={celcius_icon} /></td>
+                            </tr>
+                            <tr>
+                                <td>Humidity</td>
+                                <td>{this.props.current.humidity} %</td>
+                            </tr>
+                            <tr>
+                                <td>Wind direction</td>
+                                <td>{this.props.current.wind_dir}</td>
+                            </tr>
+                            <tr>
+                                <td>Wind degree</td>
+                                <td>{this.props.current.wind_degree} °</td>
+                            </tr>
+                            <tr>
+                                <td>Wind force</td>
+                                <td>{this.props.current.wind_kph} kph</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );
