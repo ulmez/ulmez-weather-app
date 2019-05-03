@@ -3,8 +3,10 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+// import cities from 'cities.json';
+import {weathers, cities} from '../../../../inits/init';
 
-import weathers from '../../../../inits/init';
+// import weathers from '../../../../inits/init';
 
 import './StartPage.css';
 import ListBox from '../listBox/ListBox';
@@ -38,6 +40,16 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
+        console.log('************');
+        console.log('************');
+        console.log('************');
+        console.log('************');
+        console.log(cities);
+        console.log('************');
+        console.log('************');
+        console.log('************');
+        console.log('************');
+
         if(this.props.location.state !== undefined) {
             console.log('********');
             console.log(this.props.location.state.listId);
