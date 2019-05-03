@@ -138,42 +138,47 @@ class ListBox extends React.Component {
 
     popupWindow(id) {
         if(window.innerWidth >= 576) {
-            console.log(1);
+            console.log('popupWindow 1');
             const pos = $('#listCard' + id).position();
             const relX = window.event.pageX - pos.left;
             const hiddenPopup = $("#hiddenPopup" + id);
+            const hiddenPopupList = $("[id*='hiddenPopup']");
 
-            hiddenPopup[0].style.display = "block";
+            // hiddenPopup[0].style.display = "block";
             hiddenPopup[0].style.left = (relX + 15) + "px";
+
+            hiddenPopup.fadeIn(300);
+
+            for(let i = 0; i < hiddenPopupList.length; i++) {
+                if(hiddenPopupList[i].id !== "hiddenPopup" + id) {
+                    hiddenPopupList[i].style.display = "none";
+                }
+            }
         }
     }
 
-    hidePopupWindow(id) {
+    hidePopupWindow() {
         if(window.innerWidth >= 576) {
-            console.log(0);
-            const hiddenPopup = document.getElementById("hiddenPopup" + id);
+            console.log('hidePopupWindow 0');
+            // console.log($("[id*='hiddenPopup']"));
+            const hiddenPopupList = $("[id*='hiddenPopup']");
+            // console.log(hiddenPopupList[0]);
+            // $('[id*="cat"]')
+            // const hiddenPopup = $("#hiddenPopup" + id);
 
-            hiddenPopup.style.display = "none";
+            // hiddenPopup[0].style.display = "none";
+
+            for(let i = 0; i < hiddenPopupList.length; i++) {
+                hiddenPopupList[i].style.display = "none";
+            }
         }
     }
 
     updateWindowDimensions() {
-        this.setState({ width: window.innerWidth, height: window.innerHeight });
-      }
-
-    test(id) {
-        console.log('Funka det?... ' + id);
-        const listCard = $('#listCard' + id);
-
-        listCard.removeClass('fade-in-list-box');
-        listCard.addClass('fade-out-list-box');
-
-        setTimeout(() => {
-            listCard.removeClass('fade-out-list-box');
-            listCard.stop( true, true ).addClass('fade-in-list-box');
-            this.props.deleteBox();
-            // listCard.show();
-        }, 500);
+        this.setState({
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
     }
 
     render() {
@@ -189,7 +194,7 @@ class ListBox extends React.Component {
         // console.log(this.props.RGBTemperature);
         // console.log(this.props.weatherIcon);
         return (
-            <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseOut={() => this.hidePopupWindow(this.props.getIndex)} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4 fade-in-list-box">
+            <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseLeave={this.hidePopupWindow} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4 fade-in-list-box">
                 <div className="row p-2 align-self-center">
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
                     <div className="d-flex align-items-center list-box box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
