@@ -137,6 +137,7 @@ class ListBox extends React.Component {
     // }
 
     popupWindow(id) {
+        // console.log($("#hiddenPopup" + id).height());
         if(window.innerWidth >= 576) {
             console.log('popupWindow 1');
             const pos = $('#listCard' + id).position();
@@ -146,6 +147,7 @@ class ListBox extends React.Component {
 
             // hiddenPopup[0].style.display = "block";
             hiddenPopup[0].style.left = (relX + 15) + "px";
+            hiddenPopup[0].style.top = 115 - $("#hiddenPopup" + id).height() + "px";
 
             hiddenPopup.fadeIn(300);
 

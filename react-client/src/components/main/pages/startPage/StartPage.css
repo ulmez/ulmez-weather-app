@@ -20,6 +20,10 @@
 	font-size: 0.95em;
 }
 
+.start-page.position-textfield {
+    height: 40px;
+}
+
 .start-page.lime-green-text {
 	color: #C7DD34;
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import _ from 'lodash';
 // import cities from 'cities.json';
 import {weathers, cities} from '../../../../inits/init';
 
@@ -18,13 +19,16 @@ class StartPage extends Component {
         this.state = {
             city: '',
             listName: '',
-            weathers: []
+            weathers: [],
+            showDropdownBox: true
         };
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
         this.handleChangeListName = this.handleChangeListName.bind(this);
         this.searchCityName = this.searchCityName.bind(this);
         this.addWeatherList = this.addWeatherList.bind(this);
+        this.dropdownSelect = this.dropdownSelect.bind(this);
+        this.abortDrowdownBox = this.abortDrowdownBox.bind(this);
     }
 
     componentWillUnmount() {
@@ -40,15 +44,15 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
-        console.log('************');
-        console.log('************');
-        console.log('************');
-        console.log('************');
-        console.log(cities);
-        console.log('************');
-        console.log('************');
-        console.log('************');
-        console.log('************');
+        // console.log('************');
+        // console.log('************');
+        // console.log('************');
+        // console.log('************');
+        // console.log(cities);
+        // console.log('************');
+        // console.log('************');
+        // console.log('************');
+        // console.log('************');
 
         if(this.props.location.state !== undefined) {
             console.log('********');
@@ -96,7 +100,8 @@ class StartPage extends Component {
 
     handleChangeCity(event) {
         this.setState({
-            city: event.target.value
+            city: event.target.value,
+            showDropdownBox: true
         });
     }
 
@@ -261,12 +266,40 @@ class StartPage extends Component {
         }
     }
 
+    citySearch(searchCriteria) {
+        const sortedCities = _.orderBy(cities, ['city'],['asc']);
+
+        if(searchCriteria.trim() !== '') {
+            return sortedCities.filter((o) => {
+                return o.city.toLowerCase().includes(searchCriteria.toLowerCase().trim());
+            });
+        } else {
+            return [];
+        }
+    }
+
+    dropdownSelect(event) {
+        console.log(event.target.textContent);
+        this.setState({
+            city: event.target.textContent,
+            showDropdownBox: false
+        });
+    }
+
+    abortDrowdownBox(event) {
+        console.log(event.target);
+        this.setState({
+            showDropdownBox: false
+        });
+    }
+
     render() {
+        console.log(this.citySearch(this.state.city));
         // console.log(this.getWeatherIcon(1, 1000));
         // console.log(this.getRGBTemperature(10));
         // console.log(this.props);
         // console.log(this.props.location.state);
-        console.log(this.state.weathers);
+        // console.log(this.state.weathers);
         return (
             <div>
                 <div className="row">
@@ -279,15 +312,29 @@ class StartPage extends Component {
                         <p className="cursive-text text-center">
                             How's the weather in...
                         </p>
-                        <p className="input-group input-group-md">
+                        <div className="input-group input-group-md">
                             <span className="start-page input-group-addon btn-white position-location-text">
                                 <label className="start-page label-sized-text"><b>Location:</b></label>
                             </span>
-                            <input type="text" value={this.state.city} onChange={this.handleChangeCity} className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
+                            <input type="text" value={this.state.city} onBlur={this.abortDrowdownBox} onFocus={this.handleChangeCity} onChange={this.handleChangeCity} className="start-page form-control btn-white position-textfield" placeholder="Enter city..." />
                             <span className="start-page input-group-addon btn-white">
                                 <span onClick={this.searchCityName} className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
                             </span>
-                        </p>
+                            {this.state.showDropdownBox && this.citySearch(this.state.city).length > 0 && <div style={{position: 'absolute', opacity: '0.8', top: '40px', width: '100%', zIndex: '9999'}}>
+                            <table className="table table-sm table-hover table-dark">
+                                <tbody>
+                                    {this.citySearch(this.state.city).map((city, index) => (
+                                        <tr key={index}>
+                                            <td onMouseDown={this.dropdownSelect} style={{cursor: 'pointer'}}>{city.city}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                                {/* {this.citySearch(this.state.city).map((city, index) => (
+                                    <div key={index}>{city.city}</div>
+                                ))} */}
+                            </div>}
+                        </div>
                     </div>
                 </div>
                 <div className="row">
