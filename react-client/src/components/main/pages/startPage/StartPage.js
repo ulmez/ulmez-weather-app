@@ -4,10 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import _ from 'lodash';
-// import cities from 'cities.json';
-import {weathers, cities} from '../../../../inits/init';
 
-// import weathers from '../../../../inits/init';
+import { weathers, cities } from '../../../../inits/init';
 
 import './StartPage.css';
 import ListBox from '../listBox/ListBox';
@@ -44,16 +42,6 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
-        // console.log('************');
-        // console.log('************');
-        // console.log('************');
-        // console.log('************');
-        // console.log(cities);
-        // console.log('************');
-        // console.log('************');
-        // console.log('************');
-        // console.log('************');
-
         if(this.props.location.state !== undefined) {
             console.log('********');
             console.log(this.props.location.state.listId);
@@ -88,10 +76,9 @@ class StartPage extends Component {
             });
 
             this.setState({
-                weathers: this.state.weathers
+                weathers: this.state.weathers,
+                city: ''
             });
-
-            // console.log(this.state.weathers);
         })
         .catch((error) => {
             console.log(error);
@@ -279,15 +266,14 @@ class StartPage extends Component {
     }
 
     dropdownSelect(event) {
-        console.log(event.target.textContent);
+        console.log(event.target.parentNode.firstChild.textContent);
         this.setState({
-            city: event.target.textContent,
+            city: event.target.parentNode.firstChild.textContent,
             showDropdownBox: false
         });
     }
 
-    abortDrowdownBox(event) {
-        console.log(event.target);
+    abortDrowdownBox() {
         this.setState({
             showDropdownBox: false
         });
@@ -320,19 +306,17 @@ class StartPage extends Component {
                             <span className="start-page input-group-addon btn-white">
                                 <span onClick={this.searchCityName} className="start-page fa fa-plus lime-green-text position-plus-icon"></span>
                             </span>
-                            {this.state.showDropdownBox && this.citySearch(this.state.city).length > 0 && <div style={{position: 'absolute', opacity: '0.8', top: '40px', width: '100%', zIndex: '9999'}}>
-                            <table className="table table-sm table-hover table-dark">
-                                <tbody>
-                                    {this.citySearch(this.state.city).map((city, index) => (
-                                        <tr key={index}>
-                                            <td onMouseDown={this.dropdownSelect} style={{cursor: 'pointer'}}>{city.city}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                                {/* {this.citySearch(this.state.city).map((city, index) => (
-                                    <div key={index}>{city.city}</div>
-                                ))} */}
+                            {this.state.showDropdownBox && this.citySearch(this.state.city).length > 0 && <div className="start-page dropdown-search-list-design">
+                                <table className="start-page cursor-pointer table table-sm table-hover table-dark">
+                                    <tbody>
+                                        {this.citySearch(this.state.city).map((city, index) => (
+                                            <tr key={index} onMouseDown={this.dropdownSelect}>
+                                                <td>{city.city}</td>
+                                                <td>{city.country}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>}
                         </div>
                     </div>
@@ -375,19 +359,10 @@ class StartPage extends Component {
     }
 }
 
-// export default StartPage;
-
 const mapStoreToProps = (store) => {
     return {
         isLoggedIn: store.hr.isLoggedIn
     };
 };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         setLoggedIn: () => dispatch(setLoggedIn()),
-//         setLoggedOut: () => dispatch(setLoggedOut())
-//     };
-// };
 
 export default withRouter(connect(mapStoreToProps, null)(StartPage));

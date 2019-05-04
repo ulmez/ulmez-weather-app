@@ -149,11 +149,15 @@ class ListBox extends React.Component {
             hiddenPopup[0].style.left = (relX + 15) + "px";
             hiddenPopup[0].style.top = 115 - $("#hiddenPopup" + id).height() + "px";
 
-            hiddenPopup.fadeIn(300);
+            // hiddenPopup.stop();
+            // hiddenPopup.fadeIn(1000);
+            hiddenPopup.show();
 
             for(let i = 0; i < hiddenPopupList.length; i++) {
+                // console.log(hiddenPopupList[i]);
                 if(hiddenPopupList[i].id !== "hiddenPopup" + id) {
-                    hiddenPopupList[i].style.display = "none";
+                    // hiddenPopupList[i].style.display = "none";
+                    $(hiddenPopupList[i]).hide();
                 }
             }
         }
@@ -217,7 +221,7 @@ class ListBox extends React.Component {
                     <table className="table table-sm table-striped table-dark">
                         <thead>
                             <tr>
-                                <th scope="col" colSpan="2">Weather statistics</th>
+                                <th colSpan="2" className="pb-0"><h5>{this.props.location.name}</h5></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -269,87 +273,62 @@ class ListBox extends React.Component {
                     </table>
                 </div>
 
-                {/* Button to Open the Modal */}
-                {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target={"#myModal" + this.props.getIndex}>
-                Open modal
-                </button> */}
-
                 {/* The Modal */}
                 <div className="modal fade" id={"myModal" + this.props.getIndex}>
                     <div className="modal-dialog modal-dialog-centered">
-                    <table className="table table-sm table-striped table-dark">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" colSpan="2">Weather statistics</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>City</td>
-                                        <td>{this.props.location.name}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Country</td>
-                                        <td>{this.props.location.country}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Date</td>
-                                        <td>{moment(this.props.location.localtime).format('YYYY-MM-DD')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Time</td>
-                                        <td>{moment(this.props.location.localtime).format('HH:mm')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Weather</td>
-                                        <td>{this.props.current.condition.text}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Temperature</td>
-                                        <td>{this.props.current.temp_c}<img src={celcius_icon} /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Feels like</td>
-                                        <td>{this.props.current.feelslike_c}<img src={celcius_icon} /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Humidity</td>
-                                        <td>{this.props.current.humidity} %</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wind direction</td>
-                                        <td>{this.props.current.wind_dir}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wind degree</td>
-                                        <td>{this.props.current.wind_degree} °</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wind force</td>
-                                        <td>{this.props.current.wind_kph} kph</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        {/* <div className="modal-content"> */}
-                        
-
-                        {/* Modal Header */}
-                        {/* <div className="modal-header">
-                            <h4 className="modal-title">Modal Heading</h4>
-                            <button type="button" className="close" data-dismiss="modal">&times;</button>
-                        </div> */}
-
-                        {/* Modal body */}
-                        {/* <div className="modal-body">
-                            
-                        </div> */}
-
-                        {/* Modal footer */}
-                        {/* <div className="modal-footer">
-                            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div> */}
-
-                        {/* </div> */}
+                        <table className="table table-sm table-striped table-dark">
+                            <thead>
+                                <tr>
+                                    <th colSpan="2" className="pb-0"><h5>{this.props.location.name}</h5></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>City</td>
+                                    <td>{this.props.location.name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>{this.props.location.country}</td>
+                                </tr>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>{moment(this.props.location.localtime).format('YYYY-MM-DD')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Time</td>
+                                    <td>{moment(this.props.location.localtime).format('HH:mm')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Weather</td>
+                                    <td>{this.props.current.condition.text}</td>
+                                </tr>
+                                <tr>
+                                    <td>Temperature</td>
+                                    <td>{this.props.current.temp_c}<img src={celcius_icon} /></td>
+                                </tr>
+                                <tr>
+                                    <td>Feels like</td>
+                                    <td>{this.props.current.feelslike_c}<img src={celcius_icon} /></td>
+                                </tr>
+                                <tr>
+                                    <td>Humidity</td>
+                                    <td>{this.props.current.humidity} %</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind direction</td>
+                                    <td>{this.props.current.wind_dir}</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind degree</td>
+                                    <td>{this.props.current.wind_degree} °</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind force</td>
+                                    <td>{this.props.current.wind_kph} kph</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

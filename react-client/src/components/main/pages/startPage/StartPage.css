@@ -24,6 +24,14 @@
     height: 40px;
 }
 
+.start-page.dropdown-search-list-design {
+    position: absolute;
+    opacity: 0.7;
+    top: 40px;
+    width: 100%;
+    z-index: 9999;
+}
+
 .start-page.lime-green-text {
 	color: #C7DD34;
 }
@@ -36,4 +44,12 @@
 
 .start-page.lime-green-text:hover {
     cursor: pointer;
+}
+
+.start-page.cursor-pointer {
+    cursor: pointer;
+}
+
+.start-page.cursor-default {
+    cursor: default;
 }
