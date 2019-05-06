@@ -1624,11 +1624,6 @@ circular-json@^0.3.1:
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
   integrity sha512-UZK3NBx2Mca+b5LsG7bY183pHWt5Y1xts4P3Pz7ENTwGVnJOUWbRb3ocjvX7hx9tq/yTAdclXm9sZ38gNuem4A==
 
-cities.json@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/cities.json/-/cities.json-1.1.5.tgz#bd82fd19f67e8f7a9735b0e9c1c45d050c2bfe73"
-  integrity sha512-BKge3FmYfYOtN3tBaLfN9QvB7M5dDyjen3aFOn6XwgNASvLDhWTJazAtCvbpDWlpM6YWZXh4TUTsgxOn/n6MbA==
-
 clap@^1.0.9:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/clap/-/clap-1.2.3.tgz#4f36745b32008492557f46412d66d50cb99bce51"
@@ -4744,6 +4739,11 @@ klaw@^1.0.0:
   integrity sha1-QIhDO0azsbolnXh4XY6W9zugJDk=
   optionalDependencies:
     graceful-fs "^4.1.9"
+
+konva@^3.2.5:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-3.2.5.tgz#85311fb28d84582839ae061d9476b690ee50205e"
+  integrity sha512-oMtNKczi0jz6kd9rpxqZWOVQqdJDBxEbjMdbZuUH1DttPQ0HKMuGcayk5PJX7YEVmg3N2ZYqzMAObE6itFS9Qg==
 
 latest-version@^3.0.0:
   version "3.1.0"

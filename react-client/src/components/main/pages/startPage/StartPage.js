@@ -4,11 +4,16 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import _ from 'lodash';
+import Konva from 'konva';
 
 import { weathers, cities } from '../../../../inits/init';
 
-import './StartPage.css';
 import ListBox from '../listBox/ListBox';
+
+import './StartPage.css';
+
+// import europeImage from './europe-2.jpg';
+// import vaderImage from './vader-2.jpg';
 
 class StartPage extends Component {
     constructor(props) {
@@ -18,7 +23,8 @@ class StartPage extends Component {
             city: '',
             listName: '',
             weathers: [],
-            showDropdownBox: true
+            showDropdownBox: true,
+            imagePaths: ['https://i.imgur.com/qbfi1Wl.jpg', 'https://i.imgur.com/DZT5Um3.jpg']
         };
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
@@ -42,6 +48,8 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
+        this.test();
+
         if(this.props.location.state !== undefined) {
             console.log('********');
             console.log(this.props.location.state.listId);
@@ -130,7 +138,7 @@ class StartPage extends Component {
 
             const nameList = [];
 
-            this.state.weathers.map((weather) => {
+            this.state.weathers.forEach((weather) => {
                 nameList.push(weather.location.name);
             });
 
@@ -279,6 +287,182 @@ class StartPage extends Component {
         });
     }
 
+    // *******************
+    // Load images and run the whenLoaded callback when all have loaded;
+    // The callback is passed an array of loaded Image objects.
+    loadImages(paths, whenLoaded) {
+        const imgs=[];
+        let counter = 0;
+        paths.forEach((path) => {
+            const img = new Image();
+            img.onload = () => {
+                counter++;
+                imgs[path] = img;
+                if(counter===paths.length) {
+                    whenLoaded(imgs);
+                }
+            }
+            img.src = path;
+        });
+    }
+
+
+    test() {
+        // console.log(europeImage);
+        // console.log(vaderImage);
+        // console.log([europeImage, vaderImage]);
+        this.loadImages(this.state.imagePaths, (loadedImages) => {
+            console.log(loadedImages);
+    
+            var width = 285;
+            var height = 200;
+    
+            function drawImage() {
+              var stage = new Konva.Stage({
+                container: 'canvas-container',
+                width: width,
+                height: height
+              });
+    
+              // console.log(stage.getContainer().firstChild);
+            //   stage.getContainer().firstChild.style.border = '1px solid black';
+    
+              var layer = new Konva.Layer();
+    
+              // Europe map
+              var europeMapImage = new Konva.Image({
+                image: loadedImages['https://i.imgur.com/qbfi1Wl.jpg']
+              });
+    
+              // Vader 1
+              var vaderImage = new Konva.Image({
+                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+                x: 150,
+                y: 230
+              });
+    
+              // Vader 2
+              var vaderImage2 = new Konva.Image({
+                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+                x: 400,
+                y: 430
+              });
+    
+              // Vader 3
+              var vaderImage3 = new Konva.Image({
+                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+                x: 650,
+                y: 530
+              });
+    
+              var group = new Konva.Group({
+                x: stage.width() / 2 - loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width / 2,
+                y: stage.height() / 2 - loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height / 2,
+                width: loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width,
+                height: loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height,
+                draggable: true,
+                dragBoundFunc: function(pos) {
+                  // console.log('x: ' + pos.x);
+                  // console.log('y: ' + pos.y);
+                  // console.log(imageObj.width);
+                  // console.log(imageObj.height);
+                  var newX, newY;
+    
+                  if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width)) {
+                    newX = pos.x;
+                  } else {
+                    if(pos.x < 0) {
+                      newX = -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width);
+                    }
+                    else if(pos.x > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width)) {
+                      newX = 0;
+                    }
+                  }
+    
+                  if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height)) {
+                    newY = pos.y;
+                  } else {
+                    if(pos.y < 0) {
+                      newY = -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height);
+                    }
+                    else if(pos.y > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height)) {
+                      newY = 0;
+                    }
+                  }
+    
+                  return {
+                    x: newX,
+                    y: newY
+                  };
+                }
+              });
+    
+              // add cursor styling
+              europeMapImage.on('mouseover', function() {
+                document.body.style.cursor = 'pointer';
+              });
+    
+              europeMapImage.on('mouseout', function() {
+                document.body.style.cursor = 'default';
+              });
+    
+              vaderImage.on('mousemove', function() {
+                var popup = document.getElementById('popup');
+                popup.style.top = (window.event.pageY - 5) + 'px';
+                popup.style.left = (window.event.pageX + 15) + 'px';
+                popup.style.display = 'block';
+              });
+    
+              vaderImage.on('mouseover', function() {
+                document.body.style.cursor = 'pointer';
+              });
+    
+              vaderImage.on('mouseout', function() {
+                var popup = document.getElementById('popup');
+                popup.style.display = 'none';
+    
+                document.body.style.cursor = 'default';
+              });
+    
+              vaderImage2.on('mousemove', function() {
+                var popup = document.getElementById('popup');
+                popup.style.top = (window.event.pageY - 5) + 'px';
+                popup.style.left = (window.event.pageX + 15) + 'px';
+                popup.style.display = 'block';
+              });
+    
+              vaderImage2.on('mouseout', function() {
+                var popup = document.getElementById('popup');
+                popup.style.display = 'none';
+    
+                document.body.style.cursor = 'default';
+              });
+    
+              vaderImage3.on('mousemove', function() {
+                var popup = document.getElementById('popup');
+                popup.style.top = (window.event.pageY - 5) + 'px';
+                popup.style.left = (window.event.pageX + 15) + 'px';
+                popup.style.display = 'block';
+              });
+    
+              vaderImage3.on('mouseout', function() {
+                var popup = document.getElementById('popup');
+                popup.style.display = 'none';
+    
+                document.body.style.cursor = 'default';
+              });
+    
+              group.add(europeMapImage, vaderImage, vaderImage2, vaderImage3);
+              // group.add(vaderImage);
+              layer.add(group);
+              stage.add(layer);
+            }
+            
+            drawImage();
+          });
+    }
+    // *******************
+
     render() {
         console.log(this.citySearch(this.state.city));
         // console.log(this.getWeatherIcon(1, 1000));
@@ -319,6 +503,9 @@ class StartPage extends Component {
                                 </table>
                             </div>}
                         </div>
+                        <div style={{border: '0px solid black'}}>
+                            <div id="canvas-container" style={{border: '0px solid black', width: '285px', margin: '0 auto'}}></div>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
@@ -354,6 +541,7 @@ class StartPage extends Component {
                         />
                     ))}
                 </div>
+                <div id="popup" style={{border: '1px solid white', backgroundColor: 'black', color: 'white', position: 'absolute', display: 'none'}}>Hejsan!</div>
             </div>
         );
     }
