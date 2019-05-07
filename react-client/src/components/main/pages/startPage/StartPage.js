@@ -300,7 +300,7 @@ class StartPage extends Component {
             img.onload = () => {
                 counter++;
                 imgs[path] = img;
-                if(counter===paths.length) {
+                if(counter === paths.length) {
                     whenLoaded(imgs);
                 }
             }
@@ -315,6 +315,15 @@ class StartPage extends Component {
         // console.log([europeImage, vaderImage]);
         this.loadImages(this.state.imagePaths, (loadedImages) => {
             console.log(loadedImages);
+
+            function componentToHex(c) {
+                var hex = c.toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }
+            
+            function rgbToHex(r, g, b) {
+                return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
     
             var width = $('#canvas-container').width();
             var height = 250;
@@ -337,25 +346,190 @@ class StartPage extends Component {
               });
     
               // Vader 1
-              var vaderImage = new Konva.Image({
-                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-                x: 150,
-                y: 230
-              });
+            //   var vaderImage = new Konva.Image({
+            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+            //     x: 150,
+            //     y: 230
+            //   });
     
               // Vader 2
-              var vaderImage2 = new Konva.Image({
-                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-                x: 400,
-                y: 430
-              });
+            //   var vaderImage2 = new Konva.Image({
+            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+            //     x: 400,
+            //     y: 430
+            //   });
     
               // Vader 3
-              var vaderImage3 = new Konva.Image({
-                image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-                x: 650,
-                y: 530
-              });
+            //   var vaderImage3 = new Konva.Image({
+            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
+            //     x: 650,
+            //     y: 530
+            //   });
+
+
+            //   var upperLeft = new Konva.Rect({
+            //     x: 15,
+            //     y: 15,
+            //     width: 50,
+            //     height: 15,
+            //     fill: 'black'
+            //   });
+
+            //   var text = new Konva.Text({
+            //     x: 18,
+            //     y: 19,
+            //     width: 50,
+            //     text: 'JEYKJAVIK',
+            //     fontSize: 8,
+            //     fontFamily: 'Verdana',
+            //     fill: 'white',
+            //     background: 'black'
+            //   });
+
+            function label(text, x, y, rgbColor, temperature) {
+                var simpleLabel = new Konva.Label({
+                    x: x,
+                    y: y
+                });
+
+                simpleLabel.add(
+                    new Konva.Circle({
+                        x: -11,
+                        y: 8,
+                        radius: 8,
+                        fill: rgbColor,//rgbToHex(255, 0, 0),
+                        stroke: 'black',
+                        strokeWidth: 1
+                    })
+                );
+
+                simpleLabel.add(
+                    new Konva.Tag({
+                        fill: 'black'
+                    })
+                );
+    
+                simpleLabel.add(
+                    new Konva.Text({
+                        text: text + ' ' + temperature + ' °C',
+                        fontFamily: 'Verdana',
+                        fontSize: 8,
+                        padding: 4,
+                        fill: 'white'
+                    })
+                );
+
+                return simpleLabel;
+            }
+
+            function colorOf(arrRGBColor1, arrRGBColor2, numberOfGrades, temperature) {
+                let checkAllowedTemperature;
+            
+                // Block to make span of colors restricted to numberOfGrades parameter.
+                // If a city has temperature 33 and numberOfGrades are declared to 30,
+                // temperature will be changed to 30 so the color range will be intact.
+                if (temperature > numberOfGrades) {
+                    checkAllowedTemperature = numberOfGrades;
+                } else if (temperature < -numberOfGrades) {
+                    checkAllowedTemperature = -numberOfGrades;
+                } else {
+                    checkAllowedTemperature = temperature;
+                }
+            
+                let r1, g1, b1, r2, g2, b2;
+            
+                // RGB color for start of range
+                r1 = arrRGBColor1[0];
+                g1 = arrRGBColor1[1];
+                b1 = arrRGBColor1[2];
+            
+                // RGB color for end of range
+                r2 = arrRGBColor2[0];
+                g2 = arrRGBColor2[1];
+                b2 = arrRGBColor2[2];
+            
+                let stepR, stepG, stepB;
+            
+                // Block to get the difference between starting
+                // RGB color and ending RGB color even if the
+                // starting color has a lower or higher value.
+                if (r1 < r2) {
+                    stepR = (r2 - r1) / numberOfGrades;
+                } else if (r1 > r2) {
+                    stepR = -(r1 - r2) / numberOfGrades;
+                } else {
+                    stepR = 0;
+                }
+            
+                if (g1 < g2) {
+                    stepG = (g2 - g1) / numberOfGrades;
+                } else if (g1 > g2) {
+                    stepG = -(g1 - g2) / numberOfGrades;
+                } else {
+                    stepG = 0;
+                }
+            
+                if (b1 < b2) {
+                    stepB = (b2 - b1) / numberOfGrades;
+                } else if (b1 > b2) {
+                    stepB = -(b1 - b2) / numberOfGrades;
+                } else {
+                    stepB = 0;
+                }
+            
+                // Change a negative value to a positive value
+                if (checkAllowedTemperature < 0) {
+                    checkAllowedTemperature = -checkAllowedTemperature;
+                }
+            
+                // Sets the RGB color to be used for the specific temperature
+                let tempR = r1 + Math.floor(stepR * checkAllowedTemperature);
+                let tempG = g1 + Math.floor(stepG * checkAllowedTemperature);
+                let tempB = b1 + Math.floor(stepB * checkAllowedTemperature);
+            
+                return [tempR, tempG, tempB];
+            }
+
+            function getRGBT(temperature) {
+                if (temperature >= 0) {
+                    return colorOf([0, 158, 229], [191, 64, 0], 30, temperature);
+                } else {
+                    return colorOf([0, 158, 229], [40, 0, 102], 30, temperature);
+                }
+            }
+
+            // simple label
+            // var simpleLabel = new Konva.Label({
+            //     x: 200,
+            //     y: 30
+            // });
+
+            // simpleLabel.add(
+            //     new Konva.Circle({
+            //         x: -11,
+            //         y: 8,
+            //         radius: 8,
+            //         fill: rgbToHex(255, 0, 0),
+            //         stroke: 'black',
+            //         strokeWidth: 1
+            //     })
+            // );
+
+            // simpleLabel.add(
+            //     new Konva.Tag({
+            //         fill: 'black'
+            //     })
+            // );
+
+            // simpleLabel.add(
+            //     new Konva.Text({
+            //         text: 'REYKJAVIK 5 °C',
+            //         fontFamily: 'Verdana',
+            //         fontSize: 8,
+            //         padding: 4,
+            //         fill: 'white'
+            //     })
+            // );
     
               var group = new Konva.Group({
                 x: stage.width() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width / 2,
@@ -408,54 +582,90 @@ class StartPage extends Component {
                 document.body.style.cursor = 'default';
               });
     
-              vaderImage.on('mousemove', function() {
-                var popup = document.getElementById('popup');
-                popup.style.top = (window.event.pageY - 5) + 'px';
-                popup.style.left = (window.event.pageX + 15) + 'px';
-                popup.style.display = 'block';
+            //   vaderImage.on('mousemove', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.top = (window.event.pageY - 5) + 'px';
+            //     popup.style.left = (window.event.pageX + 15) + 'px';
+            //     popup.style.display = 'block';
+            //   });
+    
+            //   vaderImage.on('mouseover', function() {
+            //     document.body.style.cursor = 'pointer';
+            //   });
+    
+            //   vaderImage.on('mouseout', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.display = 'none';
+    
+            //     document.body.style.cursor = 'default';
+            //   });
+    
+            //   vaderImage2.on('mousemove', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.top = (window.event.pageY - 5) + 'px';
+            //     popup.style.left = (window.event.pageX + 15) + 'px';
+            //     popup.style.display = 'block';
+            //   });
+    
+            //   vaderImage2.on('mouseout', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.display = 'none';
+    
+            //     document.body.style.cursor = 'default';
+            //   });
+    
+            //   vaderImage3.on('mousemove', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.top = (window.event.pageY - 5) + 'px';
+            //     popup.style.left = (window.event.pageX + 15) + 'px';
+            //     popup.style.display = 'block';
+            //   });
+    
+            //   vaderImage3.on('mouseout', function() {
+            //     var popup = document.getElementById('popup');
+            //     popup.style.display = 'none';
+    
+            //     document.body.style.cursor = 'default';
+            //   });
+
+            var arrCities = [
+                {
+                    name: 'Reykjavik',
+                    x: 200,
+                    y: 30
+                },
+                {
+                    name: 'Stockholm',
+                    x: 510,
+                    y: 230
+                }
+            ];
+    
+              group.add(europeMapImage);
+
+              arrCities.forEach(async (city) => {
+                const weather = await axios.get(`/apixus/apixu/city/${city.name}`);
+                console.log(weather.data.stats);
+                console.log(getRGBT(weather.data.stats.current.temp_c));
+                var colorTemp = getRGBT(weather.data.stats.current.temp_c);
+                city.colorTemperature = colorTemp;
+                city.temperature = weather.data.stats.current.temp_c;
+                console.log(city);
+                // group.add(simpleLabel);
+
+                var name = city.name.toUpperCase();
+                var x = city.x;
+                var y = city.y;
+                var rgb = city.colorTemperature;
+                var temperature = city.temperature;
+
+                var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
+
+                group.add(simpleLabel);
               });
-    
-              vaderImage.on('mouseover', function() {
-                document.body.style.cursor = 'pointer';
-              });
-    
-              vaderImage.on('mouseout', function() {
-                var popup = document.getElementById('popup');
-                popup.style.display = 'none';
-    
-                document.body.style.cursor = 'default';
-              });
-    
-              vaderImage2.on('mousemove', function() {
-                var popup = document.getElementById('popup');
-                popup.style.top = (window.event.pageY - 5) + 'px';
-                popup.style.left = (window.event.pageX + 15) + 'px';
-                popup.style.display = 'block';
-              });
-    
-              vaderImage2.on('mouseout', function() {
-                var popup = document.getElementById('popup');
-                popup.style.display = 'none';
-    
-                document.body.style.cursor = 'default';
-              });
-    
-              vaderImage3.on('mousemove', function() {
-                var popup = document.getElementById('popup');
-                popup.style.top = (window.event.pageY - 5) + 'px';
-                popup.style.left = (window.event.pageX + 15) + 'px';
-                popup.style.display = 'block';
-              });
-    
-              vaderImage3.on('mouseout', function() {
-                var popup = document.getElementById('popup');
-                popup.style.display = 'none';
-    
-                document.body.style.cursor = 'default';
-              });
-    
-              group.add(europeMapImage, vaderImage, vaderImage2, vaderImage3);
-              // group.add(vaderImage);
+            //   group.add(simpleLabel);
+
+
               layer.add(group);
               stage.add(layer);
             }
