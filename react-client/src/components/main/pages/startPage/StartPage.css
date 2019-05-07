@@ -32,6 +32,16 @@
     z-index: 9999;
 }
 
+.start-page.hidden-popup {
+    opacity: 0.9;
+    display: none;
+    position: absolute;
+    min-width: 350px;
+    /* min-height: 200px; */
+    /* top: -300px; */
+    z-index: 9998;
+}
+
 .start-page.lime-green-text {
 	color: #C7DD34;
 }

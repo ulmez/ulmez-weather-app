@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import $ from 'jquery';
@@ -10,6 +11,7 @@ import { weathers, cities } from '../../../../inits/init';
 
 import ListBox from '../listBox/ListBox';
 
+import celcius_icon from '../../../../images/c.svg';
 import './StartPage.css';
 
 // import europeImage from './europe-2.jpg';
@@ -24,8 +26,32 @@ class StartPage extends Component {
             listName: '',
             weathers: [],
             showDropdownBox: true,
-            imagePaths: ['https://i.imgur.com/K7k4Iaa.jpg', 'https://i.imgur.com/DZT5Um3.jpg']
+            imagePaths: ['https://i.imgur.com/K7k4Iaa.jpg', 'https://i.imgur.com/DZT5Um3.jpg'],
+            popup: {
+                city: '',
+                country: '',
+                date: '2018-08-08',
+                weather: '',
+                temperature: '',
+                feelsLike: '',
+                humidity: '',
+                windDirection: '',
+                windDegree: '',
+                windForce: ''
+            }
         };
+
+        // city
+        // country
+        // date
+        // time
+        // weather
+        // temperature
+        // feelsLike
+        // humidity
+        // windDirection
+        // windDegree
+        // windForce
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
         this.handleChangeListName = this.handleChangeListName.bind(this);
@@ -683,11 +709,20 @@ class StartPage extends Component {
                 var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
                 simpleLabel.on('mousemove', function() {
-                    // console.log(thisParam.state.kul);
-                    // thisParam.setState({
-                    //     city: city.name,
-                    //     showDropdownBox: false
-                    // });
+                    thisParam.setState({
+                        popup: {
+                            city: weather.data.stats.location.name,
+                            country: '',
+                            date: '2018-08-08',
+                            weather: '',
+                            temperature: '',
+                            feelsLike: '',
+                            humidity: '',
+                            windDirection: '',
+                            windDegree: '',
+                            windForce: ''
+                        }
+                    });
                     var popup = document.getElementById('popup');
                     popup.style.top = (window.event.pageY - 5) + 'px';
                     popup.style.left = (window.event.pageX + 15) + 'px';
@@ -702,6 +737,15 @@ class StartPage extends Component {
                 });
 
                 simpleLabel.on('click', function() {
+                    console.log('Gick in?');
+                    thisParam.setState({
+                        city: city.name,
+                        showDropdownBox: false
+                    });
+                });
+
+                simpleLabel.on('tap', function() {
+                    console.log('Gick in?');
                     thisParam.setState({
                         city: city.name,
                         showDropdownBox: false
@@ -807,7 +851,61 @@ class StartPage extends Component {
                         />
                     ))}
                 </div>
-                <div id="popup" style={{border: '1px solid white', backgroundColor: 'black', color: 'white', position: 'absolute', display: 'none'}}>Hejsan!</div>
+                <div id="popup" className="start-page hidden-popup">
+                    <table className="table table-sm table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th colSpan="2" className="pb-0"><h5>{this.state.popup.city}</h5></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>City</td>
+                                <td>{this.state.popup.city}</td>
+                            </tr>
+                            <tr>
+                                <td>Country</td>
+                                <td>{this.state.popup.country}</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>{moment(new Date(this.state.popup.date).toISOString()).format('YYYY-MM-DD')}</td>
+                            </tr>
+                            <tr>
+                                <td>Time</td>
+                                <td>{moment(new Date(this.state.popup.date).toISOString()).format('HH:mm')}</td>
+                            </tr>
+                            <tr>
+                                <td>Weather</td>
+                                <td>{this.state.popup.weather}</td>
+                            </tr>
+                            <tr>
+                                <td>Temperature</td>
+                                <td>{this.state.popup.temperature}<img src={celcius_icon} alt="°C" /></td>
+                            </tr>
+                            <tr>
+                                <td>Feels like</td>
+                                <td>{this.state.popup.feelsLike}<img src={celcius_icon} alt="°C" /></td>
+                            </tr>
+                            <tr>
+                                <td>Humidity</td>
+                                <td>{this.state.popup.humidity} %</td>
+                            </tr>
+                            <tr>
+                                <td>Wind direction</td>
+                                <td>{this.state.popup.windDirection}</td>
+                            </tr>
+                            <tr>
+                                <td>Wind degree</td>
+                                <td>{this.state.popup.windDegree} °</td>
+                            </tr>
+                            <tr>
+                                <td>Wind force</td>
+                                <td>{this.state.popup.windForce} kph</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
