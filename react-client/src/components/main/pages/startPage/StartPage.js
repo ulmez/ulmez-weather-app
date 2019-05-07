@@ -24,7 +24,7 @@ class StartPage extends Component {
             listName: '',
             weathers: [],
             showDropdownBox: true,
-            imagePaths: ['https://i.imgur.com/qbfi1Wl.jpg', 'https://i.imgur.com/DZT5Um3.jpg']
+            imagePaths: ['https://i.imgur.com/K7k4Iaa.jpg', 'https://i.imgur.com/DZT5Um3.jpg']
         };
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
@@ -33,11 +33,12 @@ class StartPage extends Component {
         this.addWeatherList = this.addWeatherList.bind(this);
         this.dropdownSelect = this.dropdownSelect.bind(this);
         this.abortDrowdownBox = this.abortDrowdownBox.bind(this);
+        this.resizeCanvas = this.resizeCanvas.bind(this);
     }
 
-    componentWillUnmount() {
-        console.log('Unmount');
-    }
+    // componentWillUnmount() {
+    //     console.log('Unmount');
+    // }
 
     componentWillReceiveProps() {
         console.log('route reload');
@@ -49,6 +50,7 @@ class StartPage extends Component {
 
     componentDidMount() {
         this.test();
+        window.addEventListener('resize', this.resizeCanvas);
 
         if(this.props.location.state !== undefined) {
             console.log('********');
@@ -314,8 +316,8 @@ class StartPage extends Component {
         this.loadImages(this.state.imagePaths, (loadedImages) => {
             console.log(loadedImages);
     
-            var width = 285;
-            var height = 200;
+            var width = $('#canvas-container').width();
+            var height = 250;
     
             function drawImage() {
               var stage = new Konva.Stage({
@@ -331,7 +333,7 @@ class StartPage extends Component {
     
               // Europe map
               var europeMapImage = new Konva.Image({
-                image: loadedImages['https://i.imgur.com/qbfi1Wl.jpg']
+                image: loadedImages['https://i.imgur.com/K7k4Iaa.jpg']
               });
     
               // Vader 1
@@ -356,10 +358,10 @@ class StartPage extends Component {
               });
     
               var group = new Konva.Group({
-                x: stage.width() / 2 - loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width / 2,
-                y: stage.height() / 2 - loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height / 2,
-                width: loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width,
-                height: loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height,
+                x: stage.width() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width / 2,
+                y: stage.height() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height / 2,
+                width: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width,
+                height: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height,
                 draggable: true,
                 dragBoundFunc: function(pos) {
                   // console.log('x: ' + pos.x);
@@ -368,24 +370,24 @@ class StartPage extends Component {
                   // console.log(imageObj.height);
                   var newX, newY;
     
-                  if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width)) {
+                  if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
                     newX = pos.x;
                   } else {
                     if(pos.x < 0) {
-                      newX = -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width);
+                      newX = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width);
                     }
-                    else if(pos.x > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].width - width)) {
+                    else if(pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
                       newX = 0;
                     }
                   }
     
-                  if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height)) {
+                  if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
                     newY = pos.y;
                   } else {
                     if(pos.y < 0) {
-                      newY = -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height);
+                      newY = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height);
                     }
-                    else if(pos.y > -(loadedImages['https://i.imgur.com/qbfi1Wl.jpg'].height - height)) {
+                    else if(pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
                       newY = 0;
                     }
                   }
@@ -463,6 +465,10 @@ class StartPage extends Component {
     }
     // *******************
 
+    resizeCanvas() {
+        this.test();
+    }
+
     render() {
         console.log(this.citySearch(this.state.city));
         // console.log(this.getWeatherIcon(1, 1000));
@@ -473,12 +479,12 @@ class StartPage extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col-sm-9 col-md-7 col-lg-6 mx-auto text-center mt-5 mb-5">
+                    <div className="col-sm-9 col-md-7 col-lg-6 mx-auto text-center mt-1 mb-2">
                         <h2>UlmeZ Weather App</h2>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="start-page col-sm-9 col-md-7 col-lg-6 mx-auto jumbotron jumbotron-design">
+                    <div className="start-page col-sm-9 col-md-7 col-lg-6 mx-auto jumbotron jumbotron-design pt-3 pb-4">
                         <p className="cursive-text text-center">
                             How's the weather in...
                         </p>
@@ -503,9 +509,9 @@ class StartPage extends Component {
                                 </table>
                             </div>}
                         </div>
-                        <div style={{border: '0px solid black'}}>
-                            <div id="canvas-container" style={{border: '0px solid black', width: '285px', margin: '0 auto'}}></div>
-                        </div>
+                        {/* <div style={{border: '1px solid black'}}> */}
+                            <div id="canvas-container" style={{border: '0px solid black'}}></div>
+                        {/* </div> */}
                     </div>
                 </div>
                 <div className="row">

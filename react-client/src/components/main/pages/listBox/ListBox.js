@@ -7,6 +7,8 @@ import '../../../../fonts/meteocons-webfont/stylesheet.css';
 import './ListBox.css';
 
 class ListBox extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -20,7 +22,12 @@ class ListBox extends React.Component {
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+
     componentDidMount() {
+        this._isMounted = true;
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
     }
@@ -70,10 +77,12 @@ class ListBox extends React.Component {
     }
 
     updateWindowDimensions() {
+        if (this._isMounted) {
         this.setState({
             width: window.innerWidth,
             height: window.innerHeight
         });
+    }
     }
 
     render() {
@@ -89,13 +98,13 @@ class ListBox extends React.Component {
         // console.log(this.props.RGBTemperature);
         // console.log(this.props.weatherIcon);
         return (
-            <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseLeave={this.hidePopupWindow} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4 fade-in-list-box">
+            <div id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseLeave={this.hidePopupWindow} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4 fade-in-list-box">
                 <div className="row p-2 align-self-center">
                     <div className="col-sm-2 d-md-none d-lg-none d-xl-none"></div>
-                    <div className="d-flex align-items-center list-box box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
+                    <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} className="d-flex align-items-center list-box box-height col-3 col-sm-2 col-md-3 col-lg-4 col-xl-3" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
                         <span className="icon" data-icon={this.props.weatherIcon}></span>
                     </div>
-                    <div className="d-flex align-items-center list-box box-height col-7 col-sm-5 col-md-7 col-lg-6 col-xl-7" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
+                    <div data-toggle={this.state.width < 576 && "modal"} data-target={"#myModal" + this.props.getIndex} className="d-flex align-items-center list-box box-height col-7 col-sm-5 col-md-7 col-lg-6 col-xl-7" style={{background: 'rgb(' + this.props.RGBTemperature[0] + ', ' + this.props.RGBTemperature[1] + ', ' + this.props.RGBTemperature[2] + ')'}}>
                         <div className="row">
                         <div className="list-box celsius-design col-12 text-center">{this.props.current.temp_c} <img src={celcius_icon} className="align-top" alt="°C" /></div>
                         <div className="col-12 text-center">{this.props.location.name}, {this.props.location.country}</div>
