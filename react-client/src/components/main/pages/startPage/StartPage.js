@@ -49,7 +49,7 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
-        this.test();
+        this.test(this);
         window.addEventListener('resize', this.resizeCanvas);
 
         if(this.props.location.state !== undefined) {
@@ -309,7 +309,7 @@ class StartPage extends Component {
     }
 
 
-    test() {
+    test(thisParam) {
         // console.log(europeImage);
         // console.log(vaderImage);
         // console.log([europeImage, vaderImage]);
@@ -332,7 +332,8 @@ class StartPage extends Component {
               var stage = new Konva.Stage({
                 container: 'canvas-container',
                 width: width,
-                height: height
+                height: height,
+                visible: false
               });
     
               // console.log(stage.getContainer().firstChild);
@@ -638,6 +639,26 @@ class StartPage extends Component {
                     name: 'Stockholm',
                     x: 510,
                     y: 230
+                },
+                {
+                    name: 'Gothenburg',
+                    x: 445,
+                    y: 265
+                },
+                {
+                    name: 'Oslo',
+                    x: 435,
+                    y: 220
+                },
+                {
+                    name: 'Bergen',
+                    x: 390,
+                    y: 200
+                },
+                {
+                    name: 'Berlin',
+                    x: 445,
+                    y: 355
                 }
             ];
     
@@ -661,13 +682,42 @@ class StartPage extends Component {
 
                 var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
+                simpleLabel.on('mousemove', function() {
+                    // console.log(thisParam.state.kul);
+                    // thisParam.setState({
+                    //     city: city.name,
+                    //     showDropdownBox: false
+                    // });
+                    var popup = document.getElementById('popup');
+                    popup.style.top = (window.event.pageY - 5) + 'px';
+                    popup.style.left = (window.event.pageX + 15) + 'px';
+                    popup.style.display = 'block';
+                });
+    
+                simpleLabel.on('mouseout', function() {
+                    var popup = document.getElementById('popup');
+                    popup.style.display = 'none';
+        
+                    document.body.style.cursor = 'default';
+                });
+
+                simpleLabel.on('click', function() {
+                    thisParam.setState({
+                        city: city.name,
+                        showDropdownBox: false
+                    });
+                });
+
                 group.add(simpleLabel);
+                
+                layer.draw();
               });
             //   group.add(simpleLabel);
 
 
               layer.add(group);
               stage.add(layer);
+              stage.show();
             }
             
             drawImage();
@@ -676,7 +726,7 @@ class StartPage extends Component {
     // *******************
 
     resizeCanvas() {
-        this.test();
+        this.test(this);
     }
 
     render() {
