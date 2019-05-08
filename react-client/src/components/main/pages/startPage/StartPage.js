@@ -709,24 +709,27 @@ class StartPage extends Component {
                 var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
                 simpleLabel.on('mousemove', function() {
-                    thisParam.setState({
-                        popup: {
-                            city: weather.data.stats.location.name,
-                            country: '',
-                            date: '2018-08-08',
-                            weather: '',
-                            temperature: '',
-                            feelsLike: '',
-                            humidity: '',
-                            windDirection: '',
-                            windDegree: '',
-                            windForce: ''
-                        }
-                    });
                     var popup = document.getElementById('popup');
                     popup.style.top = (window.event.pageY - 5) + 'px';
                     popup.style.left = (window.event.pageX + 15) + 'px';
                     popup.style.display = 'block';
+                });
+
+                simpleLabel.on('mouseenter', function() {
+                    thisParam.setState({
+                        popup: {
+                            city: weather.data.stats.location.name,
+                            country: weather.data.stats.location.country,
+                            date: weather.data.stats.location.localtime,
+                            weather: weather.data.stats.current.condition.text,
+                            temperature: weather.data.stats.current.temp_c,
+                            feelsLike: weather.data.stats.current.feelslike_c,
+                            humidity: weather.data.stats.current.humidity,
+                            windDirection: weather.data.stats.current.wind_dir,
+                            windDegree: weather.data.stats.current.wind_degree,
+                            windForce: weather.data.stats.current.wind_kph
+                        }
+                    });
                 });
     
                 simpleLabel.on('mouseout', function() {
@@ -748,8 +751,22 @@ class StartPage extends Component {
                     console.log('Gick in?');
                     thisParam.setState({
                         city: city.name,
-                        showDropdownBox: false
+                        showDropdownBox: false,
+                        popup: {
+                            city: weather.data.stats.location.name,
+                            country: weather.data.stats.location.country,
+                            date: weather.data.stats.location.localtime,
+                            weather: weather.data.stats.current.condition.text,
+                            temperature: weather.data.stats.current.temp_c,
+                            feelsLike: weather.data.stats.current.feelslike_c,
+                            humidity: weather.data.stats.current.humidity,
+                            windDirection: weather.data.stats.current.wind_dir,
+                            windDegree: weather.data.stats.current.wind_degree,
+                            windForce: weather.data.stats.current.wind_kph
+                        }
                     });
+
+                    $('#popupModal').modal('show');
                 });
 
                 group.add(simpleLabel);
@@ -905,6 +922,65 @@ class StartPage extends Component {
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                {/* The Modal */}
+                <div className="modal fade" id="popupModal">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <table className="table table-sm table-striped table-dark">
+                            <thead>
+                                <tr>
+                                    <th colSpan="2" className="pb-0"><h5>{this.state.popup.city}</h5></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>City</td>
+                                    <td>{this.state.popup.city}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>{this.state.popup.country}</td>
+                                </tr>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>{moment(new Date(this.state.popup.date).toISOString()).format('YYYY-MM-DD')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Time</td>
+                                    <td>{moment(new Date(this.state.popup.date).toISOString()).format('HH:mm')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Weather</td>
+                                    <td>{this.state.popup.weather}</td>
+                                </tr>
+                                <tr>
+                                    <td>Temperature</td>
+                                    <td>{this.state.popup.temperature}<img src={celcius_icon} alt="°C" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Feels like</td>
+                                    <td>{this.state.popup.feelsLike}<img src={celcius_icon} alt="°C" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Humidity</td>
+                                    <td>{this.state.popup.humidity} %</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind direction</td>
+                                    <td>{this.state.popup.windDirection}</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind degree</td>
+                                    <td>{this.state.popup.windDegree} °</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind force</td>
+                                    <td>{this.state.popup.windForce} kph</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );
