@@ -7,7 +7,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
-import { weathers, cities } from '../../../../inits/init';
+import { weathers, cities, europeMapCities } from '../../../../inits/init';
 
 import ListBox from '../listBox/ListBox';
 
@@ -655,42 +655,42 @@ class StartPage extends Component {
             //     document.body.style.cursor = 'default';
             //   });
 
-            var arrCities = [
-                {
-                    name: 'Reykjavik',
-                    x: 200,
-                    y: 30
-                },
-                {
-                    name: 'Stockholm',
-                    x: 510,
-                    y: 230
-                },
-                {
-                    name: 'Gothenburg',
-                    x: 445,
-                    y: 265
-                },
-                {
-                    name: 'Oslo',
-                    x: 435,
-                    y: 220
-                },
-                {
-                    name: 'Bergen',
-                    x: 390,
-                    y: 200
-                },
-                {
-                    name: 'Berlin',
-                    x: 445,
-                    y: 355
-                }
-            ];
+            // var europeMapCities = [
+            //     {
+            //         name: 'Reykjavik',
+            //         x: 200,
+            //         y: 30
+            //     },
+            //     {
+            //         name: 'Stockholm',
+            //         x: 510,
+            //         y: 230
+            //     },
+            //     {
+            //         name: 'Gothenburg',
+            //         x: 445,
+            //         y: 265
+            //     },
+            //     {
+            //         name: 'Oslo',
+            //         x: 435,
+            //         y: 220
+            //     },
+            //     {
+            //         name: 'Bergen',
+            //         x: 390,
+            //         y: 200
+            //     },
+            //     {
+            //         name: 'Berlin',
+            //         x: 445,
+            //         y: 355
+            //     }
+            // ];
     
               group.add(europeMapImage);
 
-              arrCities.forEach(async (city) => {
+              europeMapCities.forEach(async (city) => {
                 const weather = await axios.get(`/apixus/apixu/city/${city.name}`);
                 console.log(weather.data.stats);
                 console.log(getRGBT(weather.data.stats.current.temp_c));
@@ -710,7 +710,7 @@ class StartPage extends Component {
 
                 simpleLabel.on('mousemove', function() {
                     var popup = document.getElementById('popup');
-                    popup.style.top = (window.event.pageY - 5) + 'px';
+                    popup.style.top = (window.event.pageY - 200) + 'px';
                     popup.style.left = (window.event.pageX + 15) + 'px';
                     popup.style.display = 'block';
                 });
