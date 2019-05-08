@@ -38,7 +38,9 @@ class StartPage extends Component {
                 windDirection: '',
                 windDegree: '',
                 windForce: ''
-            }
+            },
+            width: 0,
+            height: 0
         };
 
         // city
@@ -76,6 +78,7 @@ class StartPage extends Component {
 
     componentDidMount() {
         this.test(this);
+        this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
 
         if(this.props.location.state !== undefined) {
@@ -692,12 +695,12 @@ class StartPage extends Component {
 
               europeMapCities.forEach(async (city) => {
                 const weather = await axios.get(`/apixus/apixu/city/${city.name}`);
-                console.log(weather.data.stats);
-                console.log(getRGBT(weather.data.stats.current.temp_c));
+                // console.log(weather.data.stats);
+                // console.log(getRGBT(weather.data.stats.current.temp_c));
                 var colorTemp = getRGBT(weather.data.stats.current.temp_c);
                 city.colorTemperature = colorTemp;
                 city.temperature = weather.data.stats.current.temp_c;
-                console.log(city);
+                // console.log(city);
                 // group.add(simpleLabel);
 
                 var name = city.name.toUpperCase();
@@ -709,10 +712,12 @@ class StartPage extends Component {
                 var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
                 simpleLabel.on('mousemove', function() {
-                    var popup = document.getElementById('popup');
-                    popup.style.top = (window.event.pageY - 200) + 'px';
-                    popup.style.left = (window.event.pageX + 15) + 'px';
-                    popup.style.display = 'block';
+                    if(thisParam.state.width >= 576) {
+                        var popup = document.getElementById('popup');
+                        popup.style.top = (window.event.pageY - 200) + 'px';
+                        popup.style.left = (window.event.pageX + 15) + 'px';
+                        popup.style.display = 'block';
+                    }
                 });
 
                 simpleLabel.on('mouseenter', function() {
@@ -740,7 +745,28 @@ class StartPage extends Component {
                 });
 
                 simpleLabel.on('click', function() {
-                    console.log('Gick in?');
+                    if(thisParam.state.width < 576) {
+                        console.log('click');
+                        thisParam.setState({
+                            // city: city.name,
+                            // showDropdownBox: false,
+                            popup: {
+                                city: weather.data.stats.location.name,
+                                country: weather.data.stats.location.country,
+                                date: weather.data.stats.location.localtime,
+                                weather: weather.data.stats.current.condition.text,
+                                temperature: weather.data.stats.current.temp_c,
+                                feelsLike: weather.data.stats.current.feelslike_c,
+                                humidity: weather.data.stats.current.humidity,
+                                windDirection: weather.data.stats.current.wind_dir,
+                                windDegree: weather.data.stats.current.wind_degree,
+                                windForce: weather.data.stats.current.wind_kph
+                            }
+                        });
+
+                        $('#popupModal').modal('show');
+                    }
+
                     thisParam.setState({
                         city: city.name,
                         showDropdownBox: false
@@ -748,7 +774,7 @@ class StartPage extends Component {
                 });
 
                 simpleLabel.on('tap', function() {
-                    console.log('Gick in?');
+                    console.log('tap');
                     thisParam.setState({
                         city: city.name,
                         showDropdownBox: false,
@@ -788,10 +814,15 @@ class StartPage extends Component {
 
     resizeCanvas() {
         this.test(this);
+        this.setState({
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
     }
 
     render() {
-        console.log(this.citySearch(this.state.city));
+        // console.log('width: ' + this.state.width + ', height: ' + this.state.height);
+        // console.log(this.citySearch(this.state.city));
         // console.log(this.getWeatherIcon(1, 1000));
         // console.log(this.getRGBTemperature(10));
         // console.log(this.props);
