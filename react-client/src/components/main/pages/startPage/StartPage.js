@@ -7,15 +7,14 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
+import { setCitiesOnMap } from '../../../../store/actions/headerAction';
+
 import { weathers, cities, europeMapCities } from '../../../../inits/init';
 
 import ListBox from '../listBox/ListBox';
 
 import celcius_icon from '../../../../images/c.svg';
 import './StartPage.css';
-
-// import europeImage from './europe-2.jpg';
-// import vaderImage from './vader-2.jpg';
 
 class StartPage extends Component {
     constructor(props) {
@@ -26,7 +25,7 @@ class StartPage extends Component {
             listName: '',
             weathers: [],
             showDropdownBox: true,
-            imagePaths: ['https://i.imgur.com/K7k4Iaa.jpg', 'https://i.imgur.com/DZT5Um3.jpg'],
+            imagePaths: ['https://i.imgur.com/K7k4Iaa.jpg'],
             popup: {
                 city: '',
                 country: '',
@@ -40,20 +39,9 @@ class StartPage extends Component {
                 windForce: ''
             },
             width: 0,
-            height: 0
+            height: 0//,
+            // stage: null
         };
-
-        // city
-        // country
-        // date
-        // time
-        // weather
-        // temperature
-        // feelsLike
-        // humidity
-        // windDirection
-        // windDegree
-        // windForce
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
         this.handleChangeListName = this.handleChangeListName.bind(this);
@@ -64,12 +52,12 @@ class StartPage extends Component {
         this.resizeCanvas = this.resizeCanvas.bind(this);
     }
 
-    // componentWillUnmount() {
-    //     console.log('Unmount');
-    // }
-
     componentWillReceiveProps() {
         console.log('route reload');
+        // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
+        // this.props.setCitiesOnMap(cities.data.stats);
+
+        this.test(this);
         this.setState({
             listName: '',
             weathers: []
@@ -77,6 +65,18 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
+        axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
+        .then((cities) => {
+            this.props.setCitiesOnMap(cities.data.stats);
+            // this.test(this);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+            // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
+            // this.props.setCitiesOnMap(cities.data.stats);
+        
         this.test(this);
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
@@ -88,18 +88,22 @@ class StartPage extends Component {
             console.log(this.props.location.state.weathers);
             console.log('********');
 
-            this.props.location.state.weathers.map(async (city) => {
-                const weather = await axios.get(`/apixus/apixu/city/${city}`);
-
-                this.state.weathers.push({
-                    location: weather.data.stats.location,
-                    current: weather.data.stats.current,
-                    condition: weather.data.stats.current.condition
-                });
-
-                this.setState({
-                    listName: this.props.location.state.listName,
-                    weathers: this.state.weathers
+            this.props.location.state.weathers.map((city) => {
+                return axios.get(`/apixus/apixu/city/${city}`)
+                .then((item) => {
+                    this.state.weathers.push({
+                        location: item.data.stats.location,
+                        current: item.data.stats.current,
+                        condition: item.data.stats.current.condition
+                    });
+    
+                    this.setState({
+                        listName: this.props.location.state.listName,
+                        weathers: this.state.weathers
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
                 });
             });
         }
@@ -318,7 +322,6 @@ class StartPage extends Component {
         });
     }
 
-    // *******************
     // Load images and run the whenLoaded callback when all have loaded;
     // The callback is passed an array of loaded Image objects.
     loadImages(paths, whenLoaded) {
@@ -337,7 +340,6 @@ class StartPage extends Component {
         });
     }
 
-
     test(thisParam) {
         // console.log(europeImage);
         // console.log(vaderImage);
@@ -354,470 +356,276 @@ class StartPage extends Component {
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
     
-            var width = $('#canvas-container').width();
+            var width = 541;//$('#canvas-container').width();
             var height = 250;
     
             function drawImage() {
-              var stage = new Konva.Stage({
-                container: 'canvas-container',
-                width: width,
-                height: height,
-                visible: false
-              });
-    
-              // console.log(stage.getContainer().firstChild);
-            //   stage.getContainer().firstChild.style.border = '1px solid black';
-    
-              var layer = new Konva.Layer();
-    
-              // Europe map
-              var europeMapImage = new Konva.Image({
-                image: loadedImages['https://i.imgur.com/K7k4Iaa.jpg']
-              });
-    
-              // Vader 1
-            //   var vaderImage = new Konva.Image({
-            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-            //     x: 150,
-            //     y: 230
-            //   });
-    
-              // Vader 2
-            //   var vaderImage2 = new Konva.Image({
-            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-            //     x: 400,
-            //     y: 430
-            //   });
-    
-              // Vader 3
-            //   var vaderImage3 = new Konva.Image({
-            //     image: loadedImages['https://i.imgur.com/DZT5Um3.jpg'],
-            //     x: 650,
-            //     y: 530
-            //   });
-
-
-            //   var upperLeft = new Konva.Rect({
-            //     x: 15,
-            //     y: 15,
-            //     width: 50,
-            //     height: 15,
-            //     fill: 'black'
-            //   });
-
-            //   var text = new Konva.Text({
-            //     x: 18,
-            //     y: 19,
-            //     width: 50,
-            //     text: 'JEYKJAVIK',
-            //     fontSize: 8,
-            //     fontFamily: 'Verdana',
-            //     fill: 'white',
-            //     background: 'black'
-            //   });
-
-            function label(text, x, y, rgbColor, temperature) {
-                var simpleLabel = new Konva.Label({
-                    x: x,
-                    y: y
+                var stage = new Konva.Stage({
+                    container: 'canvas-container',
+                    width: width,
+                    height: height,
+                    visible: false
                 });
 
-                simpleLabel.add(
-                    new Konva.Circle({
-                        x: -11,
-                        y: 8,
-                        radius: 8,
-                        fill: rgbColor,//rgbToHex(255, 0, 0),
-                        stroke: 'black',
-                        strokeWidth: 1
-                    })
-                );
+                // thisParam.setState({
+                //     stage: stage
+                // });
+    
+                var layer = new Konva.Layer();
 
-                simpleLabel.add(
-                    new Konva.Tag({
-                        fill: 'black'
-                    })
-                );
-    
-                simpleLabel.add(
-                    new Konva.Text({
-                        text: text + ' ' + temperature + ' °C',
-                        fontFamily: 'Verdana',
-                        fontSize: 8,
-                        padding: 4,
-                        fill: 'white'
-                    })
-                );
-
-                return simpleLabel;
-            }
-
-            function colorOf(arrRGBColor1, arrRGBColor2, numberOfGrades, temperature) {
-                let checkAllowedTemperature;
-            
-                // Block to make span of colors restricted to numberOfGrades parameter.
-                // If a city has temperature 33 and numberOfGrades are declared to 30,
-                // temperature will be changed to 30 so the color range will be intact.
-                if (temperature > numberOfGrades) {
-                    checkAllowedTemperature = numberOfGrades;
-                } else if (temperature < -numberOfGrades) {
-                    checkAllowedTemperature = -numberOfGrades;
-                } else {
-                    checkAllowedTemperature = temperature;
-                }
-            
-                let r1, g1, b1, r2, g2, b2;
-            
-                // RGB color for start of range
-                r1 = arrRGBColor1[0];
-                g1 = arrRGBColor1[1];
-                b1 = arrRGBColor1[2];
-            
-                // RGB color for end of range
-                r2 = arrRGBColor2[0];
-                g2 = arrRGBColor2[1];
-                b2 = arrRGBColor2[2];
-            
-                let stepR, stepG, stepB;
-            
-                // Block to get the difference between starting
-                // RGB color and ending RGB color even if the
-                // starting color has a lower or higher value.
-                if (r1 < r2) {
-                    stepR = (r2 - r1) / numberOfGrades;
-                } else if (r1 > r2) {
-                    stepR = -(r1 - r2) / numberOfGrades;
-                } else {
-                    stepR = 0;
-                }
-            
-                if (g1 < g2) {
-                    stepG = (g2 - g1) / numberOfGrades;
-                } else if (g1 > g2) {
-                    stepG = -(g1 - g2) / numberOfGrades;
-                } else {
-                    stepG = 0;
-                }
-            
-                if (b1 < b2) {
-                    stepB = (b2 - b1) / numberOfGrades;
-                } else if (b1 > b2) {
-                    stepB = -(b1 - b2) / numberOfGrades;
-                } else {
-                    stepB = 0;
-                }
-            
-                // Change a negative value to a positive value
-                if (checkAllowedTemperature < 0) {
-                    checkAllowedTemperature = -checkAllowedTemperature;
-                }
-            
-                // Sets the RGB color to be used for the specific temperature
-                let tempR = r1 + Math.floor(stepR * checkAllowedTemperature);
-                let tempG = g1 + Math.floor(stepG * checkAllowedTemperature);
-                let tempB = b1 + Math.floor(stepB * checkAllowedTemperature);
-            
-                return [tempR, tempG, tempB];
-            }
-
-            function getRGBT(temperature) {
-                if (temperature >= 0) {
-                    return colorOf([0, 158, 229], [191, 64, 0], 30, temperature);
-                } else {
-                    return colorOf([0, 158, 229], [40, 0, 102], 30, temperature);
-                }
-            }
-
-            // simple label
-            // var simpleLabel = new Konva.Label({
-            //     x: 200,
-            //     y: 30
-            // });
-
-            // simpleLabel.add(
-            //     new Konva.Circle({
-            //         x: -11,
-            //         y: 8,
-            //         radius: 8,
-            //         fill: rgbToHex(255, 0, 0),
-            //         stroke: 'black',
-            //         strokeWidth: 1
-            //     })
-            // );
-
-            // simpleLabel.add(
-            //     new Konva.Tag({
-            //         fill: 'black'
-            //     })
-            // );
-
-            // simpleLabel.add(
-            //     new Konva.Text({
-            //         text: 'REYKJAVIK 5 °C',
-            //         fontFamily: 'Verdana',
-            //         fontSize: 8,
-            //         padding: 4,
-            //         fill: 'white'
-            //     })
-            // );
-    
-              var group = new Konva.Group({
-                x: stage.width() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width / 2,
-                y: stage.height() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height / 2,
-                width: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width,
-                height: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height,
-                draggable: true,
-                dragBoundFunc: function(pos) {
-                  // console.log('x: ' + pos.x);
-                  // console.log('y: ' + pos.y);
-                  // console.log(imageObj.width);
-                  // console.log(imageObj.height);
-                  var newX, newY;
-    
-                  if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
-                    newX = pos.x;
-                  } else {
-                    if(pos.x < 0) {
-                      newX = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width);
-                    }
-                    else if(pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
-                      newX = 0;
-                    }
-                  }
-    
-                  if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
-                    newY = pos.y;
-                  } else {
-                    if(pos.y < 0) {
-                      newY = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height);
-                    }
-                    else if(pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
-                      newY = 0;
-                    }
-                  }
-    
-                  return {
-                    x: newX,
-                    y: newY
-                  };
-                }
-              });
-    
-              // add cursor styling
-              europeMapImage.on('mouseover', function() {
-                document.body.style.cursor = 'pointer';
-              });
-    
-              europeMapImage.on('mouseout', function() {
-                document.body.style.cursor = 'default';
-              });
-    
-            //   vaderImage.on('mousemove', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.top = (window.event.pageY - 5) + 'px';
-            //     popup.style.left = (window.event.pageX + 15) + 'px';
-            //     popup.style.display = 'block';
-            //   });
-    
-            //   vaderImage.on('mouseover', function() {
-            //     document.body.style.cursor = 'pointer';
-            //   });
-    
-            //   vaderImage.on('mouseout', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.display = 'none';
-    
-            //     document.body.style.cursor = 'default';
-            //   });
-    
-            //   vaderImage2.on('mousemove', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.top = (window.event.pageY - 5) + 'px';
-            //     popup.style.left = (window.event.pageX + 15) + 'px';
-            //     popup.style.display = 'block';
-            //   });
-    
-            //   vaderImage2.on('mouseout', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.display = 'none';
-    
-            //     document.body.style.cursor = 'default';
-            //   });
-    
-            //   vaderImage3.on('mousemove', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.top = (window.event.pageY - 5) + 'px';
-            //     popup.style.left = (window.event.pageX + 15) + 'px';
-            //     popup.style.display = 'block';
-            //   });
-    
-            //   vaderImage3.on('mouseout', function() {
-            //     var popup = document.getElementById('popup');
-            //     popup.style.display = 'none';
-    
-            //     document.body.style.cursor = 'default';
-            //   });
-
-            // var europeMapCities = [
-            //     {
-            //         name: 'Reykjavik',
-            //         x: 200,
-            //         y: 30
-            //     },
-            //     {
-            //         name: 'Stockholm',
-            //         x: 510,
-            //         y: 230
-            //     },
-            //     {
-            //         name: 'Gothenburg',
-            //         x: 445,
-            //         y: 265
-            //     },
-            //     {
-            //         name: 'Oslo',
-            //         x: 435,
-            //         y: 220
-            //     },
-            //     {
-            //         name: 'Bergen',
-            //         x: 390,
-            //         y: 200
-            //     },
-            //     {
-            //         name: 'Berlin',
-            //         x: 445,
-            //         y: 355
-            //     }
-            // ];
-    
-              group.add(europeMapImage);
-
-              europeMapCities.forEach(async (city) => {
-                const weather = await axios.get(`/apixus/apixu/city/${city.name}`);
-                // console.log(weather.data.stats);
-                // console.log(getRGBT(weather.data.stats.current.temp_c));
-                var colorTemp = getRGBT(weather.data.stats.current.temp_c);
-                city.colorTemperature = colorTemp;
-                city.temperature = weather.data.stats.current.temp_c;
-                // console.log(city);
-                // group.add(simpleLabel);
-
-                var name = city.name.toUpperCase();
-                var x = city.x;
-                var y = city.y;
-                var rgb = city.colorTemperature;
-                var temperature = city.temperature;
-
-                var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
-
-                simpleLabel.on('mousemove', function() {
-                    if(thisParam.state.width >= 576) {
-                        var popup = document.getElementById('popup');
-                        popup.style.top = (window.event.pageY - 200) + 'px';
-                        popup.style.left = (window.event.pageX + 15) + 'px';
-                        popup.style.display = 'block';
-                    }
+                // Europe map
+                var europeMapImage = new Konva.Image({
+                    image: loadedImages['https://i.imgur.com/K7k4Iaa.jpg']
                 });
 
-                simpleLabel.on('mouseenter', function() {
-                    thisParam.setState({
-                        popup: {
-                            city: weather.data.stats.location.name,
-                            country: weather.data.stats.location.country,
-                            date: weather.data.stats.location.localtime,
-                            weather: weather.data.stats.current.condition.text,
-                            temperature: weather.data.stats.current.temp_c,
-                            feelsLike: weather.data.stats.current.feelslike_c,
-                            humidity: weather.data.stats.current.humidity,
-                            windDirection: weather.data.stats.current.wind_dir,
-                            windDegree: weather.data.stats.current.wind_degree,
-                            windForce: weather.data.stats.current.wind_kph
-                        }
+                function label(text, x, y, rgbColor, temperature) {
+                    var simpleLabel = new Konva.Label({
+                        x: x,
+                        y: y
                     });
-                });
+
+                    simpleLabel.add(
+                        new Konva.Circle({
+                            x: -11,
+                            y: 8,
+                            radius: 8,
+                            fill: rgbColor,
+                            stroke: 'black',
+                            strokeWidth: 1
+                        })
+                    );
+
+                    simpleLabel.add(
+                        new Konva.Tag({
+                            fill: 'black',
+                            opacity: 0.6
+                        })
+                    );
+
+                    simpleLabel.add(
+                        new Konva.Text({
+                            text: text + ' ' + temperature + ' °C',
+                            fontFamily: 'Verdana',
+                            fontSize: 8,
+                            padding: 4,
+                            fill: 'white'
+                        })
+                    );
+
+                    return simpleLabel;
+                }
+
+                var group = new Konva.Group({
+                    x: stage.width() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width / 2,
+                    y: stage.height() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height / 2,
+                    width: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width,
+                    height: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height,
+                    draggable: true,
+                    dragBoundFunc: function(pos) {
+                        // console.log('x: ' + pos.x);
+                        // console.log('y: ' + pos.y);
+                        // console.log(imageObj.width);
+                        // console.log(imageObj.height);
+                        var newX, newY;
     
-                simpleLabel.on('mouseout', function() {
-                    var popup = document.getElementById('popup');
-                    popup.style.display = 'none';
-        
+                        if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
+                            newX = pos.x;
+                        } else {
+                            if(pos.x < 0) {
+                                newX = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width);
+                            }
+                            else if(pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
+                                newX = 0;
+                            }
+                        }
+
+                        if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
+                            newY = pos.y;
+                        } else {
+                            if(pos.y < 0) {
+                                newY = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height);
+                            }
+                            else if(pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
+                                newY = 0;
+                            }
+                        }
+
+                        return {
+                            x: newX,
+                            y: newY
+                        };
+                    }
+                });
+
+                // add cursor styling
+                europeMapImage.on('mouseover', function() {
+                    document.body.style.cursor = 'pointer';
+                });
+
+                europeMapImage.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 });
 
-                simpleLabel.on('click', function() {
-                    if(thisParam.state.width < 576) {
-                        console.log('click');
+                group.add(europeMapImage);
+
+                // console.log(thisParam.props.citiesOnMap)
+                // console.log(europeMapCities.name);
+                // axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
+                // .then((cities) => {
+                    console.log(thisParam.props.citiesOnMap);
+var someCounter = 0;
+thisParam.props.citiesOnMap.forEach(async (item) => {
+                        someCounter++;
+                        // console.log(item.data.stats);
+                    // console.log(getRGBT(item.data.stats.current.temp_c));
+                    var colorTemp = await thisParam.getRGBTemperature(item.current.temp_c);
+
+                    item.colorTemperature = colorTemp;
+                    // city.temperature = item.current.temp_c;
+                    // console.log(city);
+                    // group.add(simpleLabel);
+
+                    var name = item.location.name.toUpperCase();
+                    var x = item.x;
+                    var y = item.y;
+                    var rgb = item.colorTemperature;
+                    var temperature = item.current.temp_c;
+
+                    var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
+
+                    simpleLabel.on('mousemove', function() {
+                        if(thisParam.state.width >= 576) {
+                            var popup = document.getElementById('popup');
+                            popup.style.top = (window.event.pageY - 200) + 'px';
+                            popup.style.left = (window.event.pageX + 15) + 'px';
+                            popup.style.display = 'block';
+                        }
+                    });
+
+                    simpleLabel.on('mouseenter', function() {
                         thisParam.setState({
-                            // city: city.name,
-                            // showDropdownBox: false,
                             popup: {
-                                city: weather.data.stats.location.name,
-                                country: weather.data.stats.location.country,
-                                date: weather.data.stats.location.localtime,
-                                weather: weather.data.stats.current.condition.text,
-                                temperature: weather.data.stats.current.temp_c,
-                                feelsLike: weather.data.stats.current.feelslike_c,
-                                humidity: weather.data.stats.current.humidity,
-                                windDirection: weather.data.stats.current.wind_dir,
-                                windDegree: weather.data.stats.current.wind_degree,
-                                windForce: weather.data.stats.current.wind_kph
+                                city: item.location.name,
+                                country: item.location.country,
+                                date: item.location.localtime,
+                                weather: item.current.condition.text,
+                                temperature: item.current.temp_c,
+                                feelsLike: item.current.feelslike_c,
+                                humidity: item.current.humidity,
+                                windDirection: item.current.wind_dir,
+                                windDegree: item.current.wind_degree,
+                                windForce: item.current.wind_kph
+                            }
+                        });
+                    });
+    
+                    simpleLabel.on('mouseout', function() {
+                        var popup = document.getElementById('popup');
+                        popup.style.display = 'none';
+            
+                        document.body.style.cursor = 'default';
+                    });
+
+                    simpleLabel.on('click', function() {
+                        if(thisParam.state.width < 576) {
+                            console.log('click');
+                            thisParam.setState({
+                                // city: city.name,
+                                // showDropdownBox: false,
+                                popup: {
+                                    city: item.location.name,
+                                    country: item.location.country,
+                                    date: item.location.localtime,
+                                    weather: item.current.condition.text,
+                                    temperature: item.current.temp_c,
+                                    feelsLike: item.current.feelslike_c,
+                                    humidity: item.current.humidity,
+                                    windDirection: item.current.wind_dir,
+                                    windDegree: item.current.wind_degree,
+                                    windForce: item.current.wind_kph
+                                }
+                            });
+
+                            $('#popupModal').modal('show');
+                        }
+
+                        thisParam.setState({
+                            city: item.location.name,
+                            showDropdownBox: false
+                        });
+                    });
+
+                    simpleLabel.on('tap', function() {
+                        console.log('tap');
+                        thisParam.setState({
+                            city: item.location.name,
+                            showDropdownBox: false,
+                            popup: {
+                                city: item.location.name,
+                                country: item.location.country,
+                                date: item.location.localtime,
+                                weather: item.current.condition.text,
+                                temperature: item.current.temp_c,
+                                feelsLike: item.current.feelslike_c,
+                                humidity: item.current.humidity,
+                                windDirection: item.current.wind_dir,
+                                windDegree: item.current.wind_degree,
+                                windForce: item.current.wind_kph
                             }
                         });
 
                         $('#popupModal').modal('show');
-                    }
-
-                    thisParam.setState({
-                        city: city.name,
-                        showDropdownBox: false
                     });
-                });
-
-                simpleLabel.on('tap', function() {
-                    console.log('tap');
-                    thisParam.setState({
-                        city: city.name,
-                        showDropdownBox: false,
-                        popup: {
-                            city: weather.data.stats.location.name,
-                            country: weather.data.stats.location.country,
-                            date: weather.data.stats.location.localtime,
-                            weather: weather.data.stats.current.condition.text,
-                            temperature: weather.data.stats.current.temp_c,
-                            feelsLike: weather.data.stats.current.feelslike_c,
-                            humidity: weather.data.stats.current.humidity,
-                            windDirection: weather.data.stats.current.wind_dir,
-                            windDegree: weather.data.stats.current.wind_degree,
-                            windForce: weather.data.stats.current.wind_kph
-                        }
+                    group.add(simpleLabel);
+                    // layer.draw();
+                    // if(someCounter === cities.data.stats.length) {
+                        console.log('Gick in en gång?');
+                        layer.draw();
+                    // }
                     });
+                // })
+                // .catch((error) => {
+                //     console.log(error);
+                // });
 
-                    $('#popupModal').modal('show');
-                });
-
-                group.add(simpleLabel);
-                
-                layer.draw();
-              });
-            //   group.add(simpleLabel);
-
-
-              layer.add(group);
-              stage.add(layer);
-              stage.show();
+                // europeMapCities.forEach((city) => {
+                //     axios.get(`/apixus/apixu/city/${city.name}`)
+                //     .then((item) => {
+                        
+                //     // console.log('1');
+                //     })
+                //     .catch((error) => {
+                //         console.log(error);
+                //     });
+                // });
+                // console.log(europeMapCities.length);
+                // $('#canvas-container').css({visibility: 'visible'});
+                layer.add(group);
+                stage.add(layer);
+                // layer.draw();
+                stage.show();
             }
-            
             drawImage();
-          });
+        });
     }
-    // *******************
 
     resizeCanvas() {
-        this.test(this);
+        // console.log($('#canvas-container').width());
+        // console.log('stage: ' +this.state.stage.width());
+        // console.log('container: ' + $('#canvas-container').width());
+        // this.state.stage.width($('#canvas-container').width());
+        // console.log($('#myTextShit').width());
+        // $('#canvas-container').width($('#myTextShit').width());
+        
+        // if(this.state.stage.width() !== $('#canvas-container').width()) {
+        //     this.test(this);
+        // }
+        
         this.setState({
             width: window.innerWidth,
             height: window.innerHeight
         });
+        // $('#canvas-container').css({visibility: 'hidden'});
     }
 
     render() {
@@ -828,6 +636,8 @@ class StartPage extends Component {
         // console.log(this.props);
         // console.log(this.props.location.state);
         // console.log(this.state.weathers);
+        // console.log(this.state.showDropdownBox);
+        // console.log(this.props.citiesOnMap);
         return (
             <div>
                 <div className="row">
@@ -861,9 +671,9 @@ class StartPage extends Component {
                                 </table>
                             </div>}
                         </div>
-                        {/* <div style={{border: '1px solid black'}}> */}
-                            <div id="canvas-container" style={{border: '0px solid black'}}></div>
-                        {/* </div> */}
+                        <div style={{overflow: 'hidden'}}>
+                            <div id="canvas-container"></div>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
@@ -1020,8 +830,17 @@ class StartPage extends Component {
 
 const mapStoreToProps = (store) => {
     return {
-        isLoggedIn: store.hr.isLoggedIn
+        isLoggedIn: store.hr.isLoggedIn,
+        citiesOnMap: store.hr.citiesOnMap
     };
 };
 
-export default withRouter(connect(mapStoreToProps, null)(StartPage));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // setLoggedIn: () => dispatch(setLoggedIn()),
+        // setLoggedOut: () => dispatch(setLoggedOut())
+        setCitiesOnMap: (val) => dispatch(setCitiesOnMap(val))
+    };
+};
+
+export default withRouter(connect(mapStoreToProps, mapDispatchToProps)(StartPage));

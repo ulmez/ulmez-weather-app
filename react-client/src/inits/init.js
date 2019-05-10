@@ -2741,7 +2741,7 @@ const cities = [
 		},
 		{
 				name: 'Moscow',
-				x: 715,
+				x: 670,
 				y: 270
 		},
 		{
@@ -2909,56 +2909,56 @@ const cities = [
 				x: 655,
 				y: 575
 		},
-		{
-				name: 'Ankara',
-				x: 705,
-				y: 595
-		},
-		{
-				name: 'Beirut',
-				x: 780,
-				y: 690
-		},
-		{
-				name: 'Jerusalem',
-				x: 780,
-				y: 735
-		},
-		{
-				name: 'Cairo',
-				x: 720,
-				y: 770
-		},
-		{
-				name: 'Baghdad',
-				x: 920,
-				y: 665
-		},
-		{
-				name: 'Baku',
-				x: 940,
-				y: 510
-		},
+		// {
+		// 		name: 'Ankara',
+		// 		x: 705,
+		// 		y: 595
+		// },
+		// {
+		// 		name: 'Beirut',
+		// 		x: 780,
+		// 		y: 690
+		// },
+		// {
+		// 		name: 'Jerusalem',
+		// 		x: 780,
+		// 		y: 735
+		// },
+		// {
+		// 		name: 'Cairo',
+		// 		x: 720,
+		// 		y: 770
+		// },
+		// {
+		// 		name: 'Baghdad',
+		// 		x: 920,
+		// 		y: 665
+		// },
+		// {
+		// 		name: 'Baku',
+		// 		x: 940,
+		// 		y: 510
+		// },
 		{
 				name: 'Chisinau',
 				x: 645,
 				y: 463
 		},
-		{
-				name: 'Kharkiv',
-				x: 715,
-				y: 395
-		},
+		// {
+		// 		name: 'Kharkiv',
+		// 		x: 715,
+		// 		y: 395
+		// },
 		{
 				name: 'Murmansk',
 				x: 620,
 				y: 40
-		},
-		{
-				name: 'Nizhny Novgorod',
-				x: 770,
-				y: 250
-		}
+		}//,
+		// {
+		// 		name: 'Nizhny Novgorod',
+		// 		x: 770,
+		// 		y: 250
+		// }
 ];
 
 export {

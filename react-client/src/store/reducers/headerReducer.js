@@ -1,5 +1,6 @@
 const initialState = {
     isLoggedIn: '',
+    citiesOnMap: []
     // authorityGrade: 0,
     // seachedProducts: '',
     // numberOfPages: [],
@@ -19,6 +20,12 @@ const headerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: false
+            };
+
+        case 'SET_CITIES_ON_MAP':
+            return {
+                ...state,
+                citiesOnMap: action.cities
             };
 
         // case 'SET_AUTHORITY_GRADE':

@@ -7,6 +7,7 @@ import HeaderPage from './main/pages/header/HeaderPage';
 import RegisterPage from './main/pages/registerPage/RegisterPage';
 import LoginPage from './main/pages/loginPage/LoginPage';
 import ListPage from './main/listPage/ListPage';
+import LoadingPage from './main/loadingPage/LoadingPage';
 
 import './App.css';
 
@@ -40,7 +41,8 @@ class App extends Component {
     return (
       <div className="container">
         <HeaderPage />
-        <Route exact path="/" component={StartPage} />
+        <Route exact path="/" component={LoadingPage} />
+        <Route exact path="/start" component={StartPage} />
         <Route exact path="/list/:id" component={StartPage} />
         <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/login" component={LoginPage} />

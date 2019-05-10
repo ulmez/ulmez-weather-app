@@ -6,6 +6,10 @@ export function setLoggedOut() {
     return { type: "SET_LOGGED_OUT" };
 };
 
+export function setCitiesOnMap(val) {
+    return { type: "SET_CITIES_ON_MAP", cities: val };
+};
+
 // export function setAuthorityGrade(val) {
 //     return { type: "SET_AUTHORITY_GRADE", grade: val };
 // };
