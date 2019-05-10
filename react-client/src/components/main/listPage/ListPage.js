@@ -26,7 +26,7 @@ class ListPage extends React.Component {
             const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
             console.log(userAuth.data.userId);
 
-            axios.post('/users/user', {id: userAuth.data.userId})
+            axios.post('/users/user', {id: userAuth.data.userId}, tokenHeader)
             .then((user) => {
                 console.log(user.data);
 
@@ -56,11 +56,11 @@ class ListPage extends React.Component {
             axios.post('/users/user/deletelist', {
                 id: userAuth.data.userId,
                 listId: listId
-            })
+            }, tokenHeader)
             .then(async (list) => {
                 console.log(list.data);
 
-                const user = await axios.post('/users/user', {id: userAuth.data.userId});
+                const user = await axios.post('/users/user', {id: userAuth.data.userId}, tokenHeader);
 
                 console.log(user.data.message[0].weatherLists);
 

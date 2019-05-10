@@ -22,6 +22,6 @@ export function authenticationCheck(thisParam) {
     }
 };
 
-export function halleluja(thisParam) {
-    thisParam.props.history.push("/");
-}
+// export function halleluja(thisParam) {
+//     thisParam.props.history.push("/");
+// }

@@ -7,11 +7,11 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
-import { authenticationCheck, halleluja } from '../../../helpers/users';
+// import { authenticationCheck, halleluja } from '../../../helpers/users';
 
 import { setCitiesOnMap } from '../../../../store/actions/headerAction';
 
-import { weathers, cities, europeMapCities } from '../../../../inits/init';
+import { weathers, cities } from '../../../../inits/init';
 
 import ListBox from '../listBox/ListBox';
 
@@ -41,8 +41,7 @@ class StartPage extends Component {
                 windForce: ''
             },
             width: 0,
-            height: 0//,
-            // stage: null
+            height: 0
         };
 
         this.handleChangeCity = this.handleChangeCity.bind(this);
@@ -78,43 +77,43 @@ class StartPage extends Component {
         //     console.log(error);
         // });
 
-            // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
-            // this.props.setCitiesOnMap(cities.data.stats);
+        // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
+        // this.props.setCitiesOnMap(cities.data.stats);
         
-            if(this.props.refreshCheck) {
-                this.props.history.push("/");
-            } else {
-                this.test(this);
-        this.resizeCanvas();
-        window.addEventListener('resize', this.resizeCanvas);
+        if(this.props.refreshCheck) {
+            this.props.history.push("/");
+        } else {
+            this.test(this);
+            this.resizeCanvas();
+            window.addEventListener('resize', this.resizeCanvas);
 
-        if(this.props.location.state !== undefined) {
-            console.log('********');
-            console.log(this.props.location.state.listId);
-            console.log(this.props.location.state.listName);
-            console.log(this.props.location.state.weathers);
-            console.log('********');
+            if(this.props.location.state !== undefined) {
+                console.log('********');
+                console.log(this.props.location.state.listId);
+                console.log(this.props.location.state.listName);
+                console.log(this.props.location.state.weathers);
+                console.log('********');
 
-            this.props.location.state.weathers.map((city) => {
-                return axios.get(`/apixus/apixu/city/${city}`)
-                .then((item) => {
-                    this.state.weathers.push({
-                        location: item.data.stats.location,
-                        current: item.data.stats.current,
-                        condition: item.data.stats.current.condition
-                    });
+                this.props.location.state.weathers.map((city) => {
+                    return axios.get(`/apixus/apixu/city/${city}`)
+                    .then((item) => {
+                        this.state.weathers.push({
+                            location: item.data.stats.location,
+                            current: item.data.stats.current,
+                            condition: item.data.stats.current.condition
+                        });
     
-                    this.setState({
-                        listName: this.props.location.state.listName,
-                        weathers: this.state.weathers
+                        this.setState({
+                            listName: this.props.location.state.listName,
+                            weathers: this.state.weathers
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
                     });
-                })
-                .catch((error) => {
-                    console.log(error);
                 });
-            });
-        }
             }
+        }
     }
 
     searchCityName() {
