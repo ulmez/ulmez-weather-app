@@ -1,9 +1,81 @@
 import React from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import './ListPage.css';
 
 class ListPage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            weatherLists: []
+        };
+    }
+
+    async componentDidMount() {
+        if(localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+    
+            const tokenHeader = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+    
+            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+            console.log(userAuth.data.userId);
+
+            axios.post('/users/user', {id: userAuth.data.userId})
+            .then((user) => {
+                console.log(user.data);
+
+                this.setState({
+                    weatherLists: user.data.message[0].weatherLists
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+
+    async deleteList(listId) {
+        if(localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+    
+            const tokenHeader = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+
+            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+            console.log(userAuth.data.userId);
+
+            axios.post('/users/user/deletelist', {
+                id: userAuth.data.userId,
+                listId: listId
+            })
+            .then(async (list) => {
+                console.log(list.data);
+
+                const user = await axios.post('/users/user', {id: userAuth.data.userId});
+
+                console.log(user.data.message[0].weatherLists);
+
+                this.setState({
+                    weatherLists: user.data.message[0].weatherLists
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+
     render() {
+        console.log(this.state.weatherLists);
         return (
             <div>
                 <div className="row">
@@ -17,33 +89,12 @@ class ListPage extends React.Component {
                             <div className="col-12 text-center">
                                 <label className="list-page label-sized-text"><b>Lists</b></label>
                             </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-18</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-19</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-20</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-21</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-22</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-23</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-24</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-25</a>
-                            </div>
-                            <div className="col-4">
-                                <a href="#">2019-03-26</a>
-                            </div>
+                            {this.state.weatherLists.map((list, index) => (
+                                <div className="col-4" key={list.listId}>
+                                    <span onClick={() => this.deleteList(list.listId)} className="text-danger fa fa-times-circle mt-1 mr-2"></span>
+                                    <Link to={{pathname: '/start', state: {weathers: list.weathers, listId: list.listId, listName: list.listName}}}>{list.listName}</Link>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
