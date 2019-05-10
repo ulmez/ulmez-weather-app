@@ -7,7 +7,7 @@ import HeaderPage from './main/pages/header/HeaderPage';
 import RegisterPage from './main/pages/registerPage/RegisterPage';
 import LoginPage from './main/pages/loginPage/LoginPage';
 import ListPage from './main/listPage/ListPage';
-import LoadingPage from './main/loadingPage/LoadingPage';
+import LoadingPage from './main/pages/loadingPage/LoadingPage';
 
 import './App.css';
 

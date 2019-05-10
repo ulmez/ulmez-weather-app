@@ -1,6 +1,7 @@
 const initialState = {
     isLoggedIn: '',
-    citiesOnMap: []
+    citiesOnMap: [],
+    refreshCheck: true
     // authorityGrade: 0,
     // seachedProducts: '',
     // numberOfPages: [],
@@ -26,6 +27,12 @@ const headerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 citiesOnMap: action.cities
+            };
+
+        case 'SET_REFRESH_CHECK':
+            return {
+                ...state,
+                refreshCheck: false
             };
 
         // case 'SET_AUTHORITY_GRADE':

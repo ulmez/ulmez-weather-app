@@ -7,6 +7,8 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
+import { authenticationCheck, halleluja } from '../../../helpers/users';
+
 import { setCitiesOnMap } from '../../../../store/actions/headerAction';
 
 import { weathers, cities, europeMapCities } from '../../../../inits/init';
@@ -65,19 +67,24 @@ class StartPage extends Component {
     }
 
     componentDidMount() {
-        axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
-        .then((cities) => {
-            this.props.setCitiesOnMap(cities.data.stats);
-            // this.test(this);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        // halleluja(this);
+
+        // axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
+        // .then((cities) => {
+        //     this.props.setCitiesOnMap(cities.data.stats);
+        //     // this.test(this);
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+        // });
 
             // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
             // this.props.setCitiesOnMap(cities.data.stats);
         
-        this.test(this);
+            if(this.props.refreshCheck) {
+                this.props.history.push("/");
+            } else {
+                this.test(this);
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
 
@@ -107,6 +114,7 @@ class StartPage extends Component {
                 });
             });
         }
+            }
     }
 
     searchCityName() {
@@ -474,6 +482,7 @@ class StartPage extends Component {
                 // .then((cities) => {
                     console.log(thisParam.props.citiesOnMap);
 var someCounter = 0;
+
 thisParam.props.citiesOnMap.forEach(async (item) => {
                         someCounter++;
                         // console.log(item.data.stats);
@@ -583,6 +592,10 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
                         layer.draw();
                     // }
                     });
+                    // $('#hihi').css({visibility: 'visible'});
+// $('#hihi').fadeTo(0, 5000, () => {
+    $("#haha").css({visibility: "visible"});
+//  });
                 // })
                 // .catch((error) => {
                 //     console.log(error);
@@ -639,7 +652,7 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
         // console.log(this.state.showDropdownBox);
         // console.log(this.props.citiesOnMap);
         return (
-            <div>
+            <div id="haha" style={{visibility: 'hidden'}}>
                 <div className="row">
                     <div className="col-sm-9 col-md-7 col-lg-6 mx-auto text-center mt-1 mb-2">
                         <h2>UlmeZ Weather App</h2>
@@ -831,7 +844,8 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
 const mapStoreToProps = (store) => {
     return {
         isLoggedIn: store.hr.isLoggedIn,
-        citiesOnMap: store.hr.citiesOnMap
+        citiesOnMap: store.hr.citiesOnMap,
+        refreshCheck: store.hr.refreshCheck
     };
 };
 
