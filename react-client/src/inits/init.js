@@ -2714,11 +2714,6 @@ const cities = [
 				x: 200,
 				y: 30
 		},
-		// {
-		// 		name: 'Falun',
-		// 		x: 485,
-		// 		y: 200
-		// },
 		{
 				name: 'Helsinki',
 				x: 575,
@@ -2734,36 +2729,16 @@ const cities = [
 				x: 445,
 				y: 265
 		},
-		// {
-		// 		name: 'Riga',
-		// 		x: 570,
-		// 		y: 275
-		// },
 		{
 				name: 'Moscow',
 				x: 670,
 				y: 270
 		},
-		// {
-		// 		name: 'Minsk',
-		// 		x: 615,
-		// 		y: 330
-		// },
-		// {
-		// 		name: 'Malmo',
-		// 		x: 455,
-		// 		y: 290
-		// },
 		{
 				name: 'Copenhagen',
 				x: 440,
 				y: 310
 		},
-		// {
-		// 		name: 'Boden',
-		// 		x: 535,
-		// 		y: 110
-		// },
 		{
 				name: 'Trondheim',
 				x: 445,
@@ -2774,36 +2749,11 @@ const cities = [
 				x: 435,
 				y: 220
 		},
-		// {
-		// 		name: 'Bergen',
-		// 		x: 390,
-		// 		y: 200
-		// },
-		// {
-		// 		name: 'Hamburg',
-		// 		x: 415,
-		// 		y: 335
-		// },
-		// {
-		// 		name: 'Frankfurt',
-		// 		x: 395,
-		// 		y: 385
-		// },
 		{
 				name: 'Prague',
 				x: 460,
 				y: 410
 		},
-		// {
-		// 		name: 'Vienna',
-		// 		x: 475,
-		// 		y: 445
-		// },
-		// {
-		// 		name: 'Budapest',
-		// 		x: 515,
-		// 		y: 465
-		// },
 		{
 				name: 'Belgrade',
 				x: 535,
@@ -2839,31 +2789,11 @@ const cities = [
 				x: 310,
 				y: 400
 		},
-		// {
-		// 		name: 'Glasgow',
-		// 		x: 270,
-		// 		y: 255
-		// },
 		{
 				name: 'Dublin',
 				x: 235,
 				y: 290
 		},
-		// {
-		// 		name: 'Lyon',
-		// 		x: 330,
-		// 		y: 460
-		// },
-		// {
-		// 		name: 'Nantes',
-		// 		x: 250,
-		// 		y: 420
-		// },
-		// {
-		// 		name: 'Toulouse',
-		// 		x: 270,
-		// 		y: 490
-		// },
 		{
 				name: 'Barcelona',
 				x: 260,
@@ -2879,86 +2809,16 @@ const cities = [
 				x: 102,
 				y: 560
 		},
-		// {
-		// 		name: 'Marrakech',
-		// 		x: 65,
-		// 		y: 675
-		// },
-		// {
-		// 		name: 'Algiers',
-		// 		x: 265,
-		// 		y: 640
-		// },
 		{
 				name: 'Rome',
 				x: 415,
 				y: 560
 		},
-		// {
-		// 		name: 'Florence',
-		// 		x: 400,
-		// 		y: 510
-		// },
-		// {
-		// 		name: 'Venice',
-		// 		x: 425,
-		// 		y: 490
-		// },
 		{
 				name: 'Istanbul',
 				x: 655,
 				y: 575
-		},
-		// {
-		// 		name: 'Ankara',
-		// 		x: 705,
-		// 		y: 595
-		// },
-		// {
-		// 		name: 'Beirut',
-		// 		x: 780,
-		// 		y: 690
-		// },
-		// {
-		// 		name: 'Jerusalem',
-		// 		x: 780,
-		// 		y: 735
-		// },
-		// {
-		// 		name: 'Cairo',
-		// 		x: 720,
-		// 		y: 770
-		// },
-		// {
-		// 		name: 'Baghdad',
-		// 		x: 920,
-		// 		y: 665
-		// },
-		// {
-		// 		name: 'Baku',
-		// 		x: 940,
-		// 		y: 510
-		// },
-		// {
-		// 		name: 'Chisinau',
-		// 		x: 645,
-		// 		y: 463
-		// },
-		// {
-		// 		name: 'Kharkiv',
-		// 		x: 715,
-		// 		y: 395
-		// },
-		// {
-		// 		name: 'Murmansk',
-		// 		x: 620,
-		// 		y: 40
-		// },
-		// {
-		// 		name: 'Nizhny Novgorod',
-		// 		x: 770,
-		// 		y: 250
-		// }
+		}
 ];
 
 export {

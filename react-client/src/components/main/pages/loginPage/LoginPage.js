@@ -94,7 +94,7 @@ class LoginPage extends React.Component {
                     this.setState({
                         axiosErrorMessage: ''
                     });
-                }, 4000);
+                }, 3000);
             }
         }
     }

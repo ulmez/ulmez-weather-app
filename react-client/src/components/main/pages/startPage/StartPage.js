@@ -7,7 +7,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
-// import { authenticationCheck, halleluja } from '../../../helpers/users';
+// import { authenticationCheck } from '../../../helpers/users';
 
 import { setCitiesOnMap } from '../../../../store/actions/headerAction';
 
@@ -54,45 +54,28 @@ class StartPage extends Component {
     }
 
     componentWillReceiveProps() {
-        console.log('route reload');
-        // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
-        // this.props.setCitiesOnMap(cities.data.stats);
-
-        this.test(this);
+        // console.log('route reload');
         this.setState({
             listName: '',
             weathers: []
         });
+        this.canvasGenerator(this);
     }
 
     componentDidMount() {
-        // halleluja(this);
-
-        // axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
-        // .then((cities) => {
-        //     this.props.setCitiesOnMap(cities.data.stats);
-        //     // this.test(this);
-        // })
-        // .catch((error) => {
-        //     console.log(error);
-        // });
-
-        // const cities = await axios.post(`/apixus/apixu/cities`, {cities: europeMapCities});
-        // this.props.setCitiesOnMap(cities.data.stats);
-        
         if(this.props.refreshCheck) {
             this.props.history.push("/");
         } else {
-            this.test(this);
+            this.canvasGenerator(this);
             this.resizeCanvas();
             window.addEventListener('resize', this.resizeCanvas);
 
             if(this.props.location.state !== undefined) {
-                console.log('********');
-                console.log(this.props.location.state.listId);
-                console.log(this.props.location.state.listName);
-                console.log(this.props.location.state.weathers);
-                console.log('********');
+                // console.log('********');
+                // console.log(this.props.location.state.listId);
+                // console.log(this.props.location.state.listName);
+                // console.log(this.props.location.state.weathers);
+                // console.log('********');
 
                 this.props.location.state.weathers.map((city) => {
                     return axios.get(`/apixus/apixu/city/${city}`)
@@ -149,7 +132,7 @@ class StartPage extends Component {
     }
 
     deleteBox(index) {
-        console.log(index);
+        // console.log(index);
         const listCard = $('#listCard' + index);
 
         listCard.fadeOut(500);
@@ -176,7 +159,7 @@ class StartPage extends Component {
             };
 
             const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
-            console.log(userAuth.data.userId);
+            // console.log(userAuth.data.userId);
 
             const nameList = [];
 
@@ -184,9 +167,9 @@ class StartPage extends Component {
                 nameList.push(weather.location.name);
             });
 
-            console.log('********');
-            console.log(nameList);
-            console.log('********');
+            // console.log('********');
+            // console.log(nameList);
+            // console.log('********');
 
             if(this.props.location.state !== undefined) {
                 const editItem = {
@@ -196,7 +179,7 @@ class StartPage extends Component {
                     weathers: nameList
                 };
 
-                await axios.post('/users/user/editlist', editItem);
+                await axios.post('/users/user/editlist', editItem, tokenHeader);
             } else {
                 const addItem = {
                     id: userAuth.data.userId,
@@ -204,7 +187,7 @@ class StartPage extends Component {
                     weathers: nameList
                 };
 
-                await axios.post('/users/user/addlist', addItem);
+                await axios.post('/users/user/addlist', addItem, tokenHeader);
             }
 
             this.props.history.push("/lists");
@@ -316,7 +299,7 @@ class StartPage extends Component {
     }
 
     dropdownSelect(event) {
-        console.log(event.target.parentNode.firstChild.textContent);
+        // console.log(event.target.parentNode.firstChild.textContent);
         this.setState({
             city: event.target.parentNode.firstChild.textContent,
             showDropdownBox: false
@@ -347,10 +330,7 @@ class StartPage extends Component {
         });
     }
 
-    test(thisParam) {
-        // console.log(europeImage);
-        // console.log(vaderImage);
-        // console.log([europeImage, vaderImage]);
+    canvasGenerator(thisParam) {
         this.loadImages(this.state.imagePaths, (loadedImages) => {
             console.log(loadedImages);
 
@@ -363,7 +343,7 @@ class StartPage extends Component {
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
     
-            var width = 541;//$('#canvas-container').width();
+            var width = 541;
             var height = 250;
     
             function drawImage() {
@@ -373,10 +353,6 @@ class StartPage extends Component {
                     height: height,
                     visible: false
                 });
-
-                // thisParam.setState({
-                //     stage: stage
-                // });
     
                 var layer = new Konva.Layer();
 
@@ -422,37 +398,34 @@ class StartPage extends Component {
                     return simpleLabel;
                 }
 
+                var europeImageUrl = 'https://i.imgur.com/K7k4Iaa.jpg';
                 var group = new Konva.Group({
-                    x: stage.width() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width / 2,
-                    y: stage.height() / 2 - loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height / 2,
-                    width: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width,
-                    height: loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height,
+                    x: stage.width() / 2 - loadedImages[europeImageUrl].width / 2,
+                    y: stage.height() / 2 - loadedImages[europeImageUrl].height / 2,
+                    width: loadedImages[europeImageUrl].width,
+                    height: loadedImages[europeImageUrl].height,
                     draggable: true,
                     dragBoundFunc: function(pos) {
-                        // console.log('x: ' + pos.x);
-                        // console.log('y: ' + pos.y);
-                        // console.log(imageObj.width);
-                        // console.log(imageObj.height);
                         var newX, newY;
     
-                        if(pos.x < 0 && pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
+                        if(pos.x < 0 && pos.x > -(loadedImages[europeImageUrl].width - width)) {
                             newX = pos.x;
                         } else {
                             if(pos.x < 0) {
-                                newX = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width);
+                                newX = -(loadedImages[europeImageUrl].width - width);
                             }
-                            else if(pos.x > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].width - width)) {
+                            else if(pos.x > -(loadedImages[europeImageUrl].width - width)) {
                                 newX = 0;
                             }
                         }
 
-                        if(pos.y < 0 && pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
+                        if(pos.y < 0 && pos.y > -(loadedImages[europeImageUrl].height - height)) {
                             newY = pos.y;
                         } else {
                             if(pos.y < 0) {
-                                newY = -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height);
+                                newY = -(loadedImages[europeImageUrl].height - height);
                             }
-                            else if(pos.y > -(loadedImages['https://i.imgur.com/K7k4Iaa.jpg'].height - height)) {
+                            else if(pos.y > -(loadedImages[europeImageUrl].height - height)) {
                                 newY = 0;
                             }
                         }
@@ -475,23 +448,13 @@ class StartPage extends Component {
 
                 group.add(europeMapImage);
 
-                // console.log(thisParam.props.citiesOnMap)
-                // console.log(europeMapCities.name);
-                // axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
-                // .then((cities) => {
-                    console.log(thisParam.props.citiesOnMap);
-var someCounter = 0;
-
-thisParam.props.citiesOnMap.forEach(async (item) => {
-                        someCounter++;
-                        // console.log(item.data.stats);
-                    // console.log(getRGBT(item.data.stats.current.temp_c));
+                var someCounter = 0;
+                thisParam.props.citiesOnMap.forEach(async (item) => {
+                    someCounter++;
+                    
                     var colorTemp = await thisParam.getRGBTemperature(item.current.temp_c);
 
                     item.colorTemperature = colorTemp;
-                    // city.temperature = item.current.temp_c;
-                    // console.log(city);
-                    // group.add(simpleLabel);
 
                     var name = item.location.name.toUpperCase();
                     var x = item.x;
@@ -536,10 +499,7 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
 
                     simpleLabel.on('click', function() {
                         if(thisParam.state.width < 576) {
-                            console.log('click');
                             thisParam.setState({
-                                // city: city.name,
-                                // showDropdownBox: false,
                                 popup: {
                                     city: item.location.name,
                                     country: item.location.country,
@@ -564,7 +524,6 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
                     });
 
                     simpleLabel.on('tap', function() {
-                        console.log('tap');
                         thisParam.setState({
                             city: item.location.name,
                             showDropdownBox: false,
@@ -581,40 +540,14 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
                                 windForce: item.current.wind_kph
                             }
                         });
-
                         $('#popupModal').modal('show');
                     });
                     group.add(simpleLabel);
-                    // layer.draw();
-                    // if(someCounter === cities.data.stats.length) {
-                        console.log('Gick in en gång?');
-                        layer.draw();
-                    // }
-                    });
-                    // $('#hihi').css({visibility: 'visible'});
-// $('#hihi').fadeTo(0, 5000, () => {
-    $("#haha").css({visibility: "visible"});
-//  });
-                // })
-                // .catch((error) => {
-                //     console.log(error);
-                // });
-
-                // europeMapCities.forEach((city) => {
-                //     axios.get(`/apixus/apixu/city/${city.name}`)
-                //     .then((item) => {
-                        
-                //     // console.log('1');
-                //     })
-                //     .catch((error) => {
-                //         console.log(error);
-                //     });
-                // });
-                // console.log(europeMapCities.length);
-                // $('#canvas-container').css({visibility: 'visible'});
+                    layer.draw();
+                });
+                $("#startPageContainer").css({visibility: "visible"});
                 layer.add(group);
                 stage.add(layer);
-                // layer.draw();
                 stage.show();
             }
             drawImage();
@@ -622,36 +555,15 @@ thisParam.props.citiesOnMap.forEach(async (item) => {
     }
 
     resizeCanvas() {
-        // console.log($('#canvas-container').width());
-        // console.log('stage: ' +this.state.stage.width());
-        // console.log('container: ' + $('#canvas-container').width());
-        // this.state.stage.width($('#canvas-container').width());
-        // console.log($('#myTextShit').width());
-        // $('#canvas-container').width($('#myTextShit').width());
-        
-        // if(this.state.stage.width() !== $('#canvas-container').width()) {
-        //     this.test(this);
-        // }
-        
         this.setState({
             width: window.innerWidth,
             height: window.innerHeight
         });
-        // $('#canvas-container').css({visibility: 'hidden'});
     }
 
     render() {
-        // console.log('width: ' + this.state.width + ', height: ' + this.state.height);
-        // console.log(this.citySearch(this.state.city));
-        // console.log(this.getWeatherIcon(1, 1000));
-        // console.log(this.getRGBTemperature(10));
-        // console.log(this.props);
-        // console.log(this.props.location.state);
-        // console.log(this.state.weathers);
-        // console.log(this.state.showDropdownBox);
-        // console.log(this.props.citiesOnMap);
         return (
-            <div id="haha" style={{visibility: 'hidden'}}>
+            <div id="startPageContainer" style={{visibility: 'hidden'}}>
                 <div className="row">
                     <div className="col-sm-9 col-md-7 col-lg-6 mx-auto text-center mt-1 mb-2">
                         <h2>UlmeZ Weather App</h2>
@@ -850,8 +762,6 @@ const mapStoreToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // setLoggedIn: () => dispatch(setLoggedIn()),
-        // setLoggedOut: () => dispatch(setLoggedOut())
         setCitiesOnMap: (val) => dispatch(setCitiesOnMap(val))
     };
 };
