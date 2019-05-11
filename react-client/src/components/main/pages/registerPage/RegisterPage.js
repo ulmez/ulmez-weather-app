@@ -8,6 +8,8 @@ import { setLoggedIn, setLoggedOut } from '../../../../store/actions/headerActio
 import './RegisterPage.css';
 
 class RegisterPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -29,6 +31,14 @@ class RegisterPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+    
+      componentDidMount() {
+        this._isMounted = true;
+    }
+
     async handleSubmit(event) {
         event.preventDefault();
         console.log(this.state);
@@ -38,73 +48,97 @@ class RegisterPage extends React.Component {
         if(this.state.firstName === "") {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 firstNameErrorMessage: 'No first name entered yet...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 firstNameErrorMessage: ''
             });
+        }
         }
 
         if(this.state.surName === "") {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 surNameErrorMessage: 'No sur name entered yet...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 surNameErrorMessage: ''
             });
+        }
         }
 
         if(this.state.email === "") {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 emailErrorMessage: 'No email entered yet...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 emailErrorMessage: ''
             });
+        }
         }
 
         if(this.state.password === "") {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 passwordErrorMessage: 'No password entered yet...'
             });
+        }
         } else if(this.state.password.length < 6) {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 passwordErrorMessage: 'Password must be at least 6 characters...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 passwordErrorMessage: ''
             });
+        }
         }
 
         if(this.state.passwordAgain === "") {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 passwordAgainErrorMessage: 'No password again entered yet...'
             });
+        }
         } else if(this.state.password !== this.state.passwordAgain) {
             registerUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 passwordAgainErrorMessage: 'Password again not the same as password...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 passwordAgainErrorMessage: ''
             });
+        }
         }
 
         if(registerUserCheck) {
@@ -119,6 +153,7 @@ class RegisterPage extends React.Component {
 
             await axios.post('/users/user/register', userItem);
 
+            if (this._isMounted) {
             this.setState({
                 firstName: '',
                 surName: '',
@@ -127,6 +162,7 @@ class RegisterPage extends React.Component {
                 passwordAgain: '',
                 successMessage: 'Successfully registered new user!'
             });
+        }
 
             const loginItem = {
                 email: userItem.email,
@@ -142,15 +178,19 @@ class RegisterPage extends React.Component {
             this.props.setLoggedIn();
 
             setTimeout(() => {
+                if (this._isMounted) {
                 this.setState({
                     successMessage: ''
                 });
+            }
             }, 4000);
         }
     }
 
     handleChange(event) {
+        if (this._isMounted) {
         this.setState({[event.target.name]: event.target.value});
+        }
     }
 
     render() {

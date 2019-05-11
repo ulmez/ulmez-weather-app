@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import './ListPage.css';
 
 class ListPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -13,7 +15,12 @@ class ListPage extends React.Component {
         };
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+
     async componentDidMount() {
+        this._isMounted = true;
         if(localStorage.getItem('token')) {
             const token = localStorage.getItem('token');
     
@@ -30,9 +37,11 @@ class ListPage extends React.Component {
             .then((user) => {
                 console.log(user.data);
 
+                if (this._isMounted) {
                 this.setState({
                     weatherLists: user.data.message[0].weatherLists
                 });
+            }
             })
             .catch((error) => {
                 console.log(error);
@@ -64,9 +73,11 @@ class ListPage extends React.Component {
 
                 console.log(user.data.message[0].weatherLists);
 
+                if (this._isMounted) {
                 this.setState({
                     weatherLists: user.data.message[0].weatherLists
                 });
+            }
             })
             .catch((error) => {
                 console.log(error);

@@ -1,23 +1,38 @@
 var axios = require('axios');
 
-module.exports.search_city = function(req, res, next) {
-    var city = req.params.name;
+module.exports.search_city = async (req, res, next) => {
+    try {
+        var city = req.params.name;
 
-    axios.get(process.env.BASE_APIXU_URL + '/current.json?key=' + process.env.APIXU_KEY + '&q=' + city)
-    .then(function(result) {
+        var result = await axios.get(process.env.BASE_APIXU_URL + '/current.json?key=' + process.env.APIXU_KEY + '&q=' + city);
+        
         console.log(result.data);
-
+        
         res.json({
             stats: result.data
         });
-    })
-    .catch(function(error) {
-        console.log(error);
 
+        // .then((result) => {
+        //     console.log(result.data);
+
+        //     res.json({
+        //         stats: result.data
+        //     });
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+
+        //     res.json({
+        //         message: error
+        //     });
+        // });
+    } catch(error) {
+        console.log(error);
         res.json({
             message: error
         });
-    });
+        // next(err);
+    }
 }
 
 module.exports.search_cities = async (req, res, next) => {

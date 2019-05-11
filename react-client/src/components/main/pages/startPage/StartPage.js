@@ -19,6 +19,8 @@ import celcius_icon from '../../../../images/c.svg';
 import './StartPage.css';
 
 class StartPage extends Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -54,22 +56,29 @@ class StartPage extends Component {
     }
 
     componentWillReceiveProps() {
-        // console.log('route reload');
+        console.log('route reload');
+        if (this._isMounted) {
         this.setState({
             listName: '',
             weathers: []
         });
+    }
         this.canvasGenerator(this);
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+    }
+
     componentDidMount() {
-        if(this.props.refreshCheck) {
-            this.props.history.push("/");
-        } else {
+        this._isMounted = true;
+        // if(this.props.refreshCheck) {
+        //     this.props.history.push("/");
+        // } else {
             this.canvasGenerator(this);
             this.resizeCanvas();
             window.addEventListener('resize', this.resizeCanvas);
-
+console.log(this.props.location.state);
             if(this.props.location.state !== undefined) {
                 // console.log('********');
                 // console.log(this.props.location.state.listId);
@@ -86,17 +95,19 @@ class StartPage extends Component {
                             condition: item.data.stats.current.condition
                         });
     
+                        if (this._isMounted) {
                         this.setState({
                             listName: this.props.location.state.listName,
                             weathers: this.state.weathers
                         });
+                    }
                     })
                     .catch((error) => {
                         console.log(error);
                     });
                 });
             }
-        }
+        // }
     }
 
     searchCityName() {
@@ -108,10 +119,12 @@ class StartPage extends Component {
                 condition: result.data.stats.current.condition
             });
 
+            if (this._isMounted) {
             this.setState({
                 weathers: this.state.weathers,
                 city: ''
             });
+        }
         })
         .catch((error) => {
             console.log(error);
@@ -119,16 +132,20 @@ class StartPage extends Component {
     }
 
     handleChangeCity(event) {
+        if (this._isMounted) {
         this.setState({
             city: event.target.value,
             showDropdownBox: true
         });
     }
+    }
 
     handleChangeListName(event) {
+        if (this._isMounted) {
         this.setState({
             listName: event.target.value
         });
+    }
     }
 
     deleteBox(index) {
@@ -140,9 +157,11 @@ class StartPage extends Component {
         setTimeout(() => {
             this.state.weathers.splice(index, 1);
 
+            if (this._isMounted) {
             this.setState({
                 weathers: this.state.weathers
             });
+        }
 
             listCard.fadeIn(0);
         }, 400);
@@ -300,16 +319,20 @@ class StartPage extends Component {
 
     dropdownSelect(event) {
         // console.log(event.target.parentNode.firstChild.textContent);
+        if (this._isMounted) {
         this.setState({
             city: event.target.parentNode.firstChild.textContent,
             showDropdownBox: false
         });
     }
+    }
 
     abortDrowdownBox() {
+        if (this._isMounted) {
         this.setState({
             showDropdownBox: false
         });
+    }
     }
 
     // Load images and run the whenLoaded callback when all have loaded;
@@ -474,6 +497,7 @@ class StartPage extends Component {
                     });
 
                     simpleLabel.on('mouseenter', function() {
+                        if (thisParam._isMounted) {
                         thisParam.setState({
                             popup: {
                                 city: item.location.name,
@@ -488,6 +512,7 @@ class StartPage extends Component {
                                 windForce: item.current.wind_kph
                             }
                         });
+                    }
                     });
     
                     simpleLabel.on('mouseout', function() {
@@ -499,6 +524,7 @@ class StartPage extends Component {
 
                     simpleLabel.on('click', function() {
                         if(thisParam.state.width < 576) {
+                            if (thisParam._isMounted) {
                             thisParam.setState({
                                 popup: {
                                     city: item.location.name,
@@ -513,17 +539,21 @@ class StartPage extends Component {
                                     windForce: item.current.wind_kph
                                 }
                             });
+                        }
 
                             $('#popupModal').modal('show');
                         }
 
+                        if (thisParam._isMounted) {
                         thisParam.setState({
                             city: item.location.name,
                             showDropdownBox: false
                         });
+                    }
                     });
 
                     simpleLabel.on('tap', function() {
+                        if (thisParam._isMounted) {
                         thisParam.setState({
                             city: item.location.name,
                             showDropdownBox: false,
@@ -540,6 +570,7 @@ class StartPage extends Component {
                                 windForce: item.current.wind_kph
                             }
                         });
+                    }
                         $('#popupModal').modal('show');
                     });
                     group.add(simpleLabel);
@@ -555,10 +586,12 @@ class StartPage extends Component {
     }
 
     resizeCanvas() {
+        if (this._isMounted) {
         this.setState({
             width: window.innerWidth,
             height: window.innerHeight
         });
+    }
     }
 
     render() {

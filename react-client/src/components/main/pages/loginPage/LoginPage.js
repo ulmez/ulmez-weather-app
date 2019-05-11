@@ -8,6 +8,8 @@ import { setLoggedIn, setLoggedOut } from '../../../../store/actions/headerActio
 import './LoginPage.css';
 
 class LoginPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -24,6 +26,14 @@ class LoginPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
     async handleSubmit(event) {
         event.preventDefault();
         console.log(this.state);
@@ -33,25 +43,33 @@ class LoginPage extends React.Component {
         if(this.state.email === "") {
             loginUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 emailErrorMessage: 'No email entered yet...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 emailErrorMessage: ''
             });
+        }
         }
 
         if(this.state.password === "") {
             loginUserCheck = false;
 
+            if (this._isMounted) {
             this.setState({
                 passwordErrorMessage: 'No password entered yet...'
             });
+        }
         } else {
+            if (this._isMounted) {
             this.setState({
                 passwordErrorMessage: ''
             });
+        }
         }
 
         if(loginUserCheck) {
@@ -71,36 +89,46 @@ class LoginPage extends React.Component {
 
                 this.props.setLoggedIn();
 
+                if (this._isMounted) {
                 this.setState({
                     email: '',
                     password: '',
                     successMessage: 'Successfully logged in user!'
                 });
+            }
 
                 setTimeout(() => {
+                    if (this._isMounted) {
                     this.setState({
                         successMessage: ''
                     });
+                }
                 }, 4000);
             } catch(e) {
                 console.log('Not right login criteria...');
 
+                if (this._isMounted) {
                 this.setState({
                     axiosErrorMessage: 'Not valid login criteria...',
                     successMessage: ''
                 });
+            }
 
                 setTimeout(() => {
+                    if (this._isMounted) {
                     this.setState({
                         axiosErrorMessage: ''
                     });
+                }
                 }, 3000);
             }
         }
     }
 
     handleChange(event) {
+        if (this._isMounted) {
         this.setState({[event.target.name]: event.target.value});
+        }
     }
 
     render() {
