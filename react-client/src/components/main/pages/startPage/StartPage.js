@@ -9,7 +9,7 @@ import Konva from 'konva';
 
 // import { authenticationCheck } from '../../../helpers/users';
 
-import { setCitiesOnMap } from '../../../../store/actions/headerAction';
+import { setCitiesOnMap, setBackRefreshCheck } from '../../../../store/actions/headerAction';
 
 import { weathers, cities } from '../../../../inits/init';
 
@@ -57,13 +57,15 @@ class StartPage extends Component {
 
     componentWillReceiveProps() {
         console.log('route reload');
-        if (this._isMounted) {
-        this.setState({
-            listName: '',
-            weathers: []
-        });
-    }
-        this.canvasGenerator(this);
+        this.props.history.push("/");
+        // this.props.setBackRefreshCheck();
+    //     if (this._isMounted) {
+    //     this.setState({
+    //         listName: '',
+    //         weathers: []
+    //     });
+    // }
+    //     this.canvasGenerator(this);
     }
 
     componentWillUnmount(){
@@ -72,9 +74,9 @@ class StartPage extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        // if(this.props.refreshCheck) {
-        //     this.props.history.push("/");
-        // } else {
+        if(this.props.refreshCheck) {
+            this.props.history.push("/");
+        } else {
             this.canvasGenerator(this);
             this.resizeCanvas();
             window.addEventListener('resize', this.resizeCanvas);
@@ -107,7 +109,7 @@ console.log(this.props.location.state);
                     });
                 });
             }
-        // }
+        }
     }
 
     searchCityName() {
@@ -795,6 +797,7 @@ const mapStoreToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setBackRefreshCheck: () => dispatch(setBackRefreshCheck()),
         setCitiesOnMap: (val) => dispatch(setCitiesOnMap(val))
     };
 };

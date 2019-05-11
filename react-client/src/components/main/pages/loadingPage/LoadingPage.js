@@ -21,19 +21,22 @@ class LoadingPage extends React.Component {
         // $("#hihi").fadeOut(2000, 1, (item) => {
         //     $(item).css({visibility: 'visible'});
         // });
-        axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
-        .then((cities) => {
-            // this.props.setCitiesOnMap(cities.data.stats);
-            if (this._isMounted) {
-            console.log(cities.data.stats);
-            this.props.setCitiesOnMap(cities.data.stats);
-            this.props.setRefreshCheck();
-            this.props.history.push("/start");
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        let myInterval = setInterval(() => {
+            axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
+            .then((cities) => {
+                // this.props.setCitiesOnMap(cities.data.stats);
+                if (this._isMounted) {
+                console.log(cities.data.stats);
+                this.props.setCitiesOnMap(cities.data.stats);
+                this.props.setRefreshCheck();
+                clearInterval(myInterval);
+                this.props.history.push("/start");
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }, 4000);
     }
 
     // componentWillReceiveProps() {

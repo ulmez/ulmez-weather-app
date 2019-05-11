@@ -27,10 +27,10 @@ module.exports.search_city = async (req, res, next) => {
         //     });
         // });
     } catch(error) {
-        console.log(error);
-        res.json({
-            message: error
-        });
+        // console.log(error);
+        // res.json({
+        //     message: error
+        // });
         // next(err);
     }
 }
@@ -87,10 +87,10 @@ module.exports.search_cities = async (req, res, next) => {
         //     result: arr
         // });
     } catch(e) {
-        console.log(e);
-        res.json({
-            message: e
-        });
+        // console.log(e);
+        // res.json({
+        //     message: e
+        // });
     }
     
 
