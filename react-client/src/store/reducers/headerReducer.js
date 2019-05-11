@@ -29,6 +29,12 @@ const headerReducer = (state = initialState, action) => {
                 ...state,
                 refreshCheck: false
             };
+        
+        case 'BACK_REFRESH_CHECK':
+            return {
+                ...state,
+                refreshCheck: true
+            };
 
         default:
             return state;
