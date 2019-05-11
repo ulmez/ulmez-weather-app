@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import './ListPage.css';
 
 class ListPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -13,7 +15,12 @@ class ListPage extends React.Component {
         };
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+
     async componentDidMount() {
+        this._isMounted = true;
         if(localStorage.getItem('token')) {
             const token = localStorage.getItem('token');
     
@@ -26,13 +33,15 @@ class ListPage extends React.Component {
             const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
             console.log(userAuth.data.userId);
 
-            axios.post('/users/user', {id: userAuth.data.userId})
+            axios.post('/users/user', {id: userAuth.data.userId}, tokenHeader)
             .then((user) => {
                 console.log(user.data);
 
+                if (this._isMounted) {
                 this.setState({
                     weatherLists: user.data.message[0].weatherLists
                 });
+            }
             })
             .catch((error) => {
                 console.log(error);
@@ -56,17 +65,19 @@ class ListPage extends React.Component {
             axios.post('/users/user/deletelist', {
                 id: userAuth.data.userId,
                 listId: listId
-            })
+            }, tokenHeader)
             .then(async (list) => {
                 console.log(list.data);
 
-                const user = await axios.post('/users/user', {id: userAuth.data.userId});
+                const user = await axios.post('/users/user', {id: userAuth.data.userId}, tokenHeader);
 
                 console.log(user.data.message[0].weatherLists);
 
+                if (this._isMounted) {
                 this.setState({
                     weatherLists: user.data.message[0].weatherLists
                 });
+            }
             })
             .catch((error) => {
                 console.log(error);

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,36 +10,45 @@ import { setCitiesOnMap, setRefreshCheck } from '../../../../store/actions/heade
 import { europeMapCities } from '../../../../inits/init';
 
 class LoadingPage extends React.Component {
+    _isMounted = false;
+
+    componentWillUnmount(){
+        this._isMounted = false;
+      }
+
     componentDidMount() {
+        this._isMounted = true;
         // $("#hihi").fadeOut(2000, 1, (item) => {
         //     $(item).css({visibility: 'visible'});
         // });
         axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
         .then((cities) => {
             // this.props.setCitiesOnMap(cities.data.stats);
+            if (this._isMounted) {
             console.log(cities.data.stats);
             this.props.setCitiesOnMap(cities.data.stats);
             this.props.setRefreshCheck();
             this.props.history.push("/start");
+            }
         })
         .catch((error) => {
             console.log(error);
         });
     }
 
-    componentWillReceiveProps() {
-        axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
-        .then((cities) => {
-            // this.props.setCitiesOnMap(cities.data.stats);
-            console.log(cities.data.stats);
-            this.props.setCitiesOnMap(cities.data.stats);
-            this.props.setRefreshCheck();
-            this.props.history.push("/start");
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }
+    // componentWillReceiveProps() {
+    //     axios.post(`/apixus/apixu/cities`, {cities: europeMapCities})
+    //     .then((cities) => {
+    //         // this.props.setCitiesOnMap(cities.data.stats);
+    //         console.log(cities.data.stats);
+    //         this.props.setCitiesOnMap(cities.data.stats);
+    //         this.props.setRefreshCheck();
+    //         this.props.history.push("/start");
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
+    // }
 
     render() {
         return (

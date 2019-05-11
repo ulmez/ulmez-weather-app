@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -14,6 +15,10 @@ class HeaderPage extends React.Component {
 
         this.logout = this.logout.bind(this);
     }
+
+    // componentWillReceiveProps() {
+    //     console.log('route reload');
+    // }
 
     componentDidMount() {
         authenticationCheck(this);
@@ -44,7 +49,7 @@ class HeaderPage extends React.Component {
         return (
             <header>
                 <nav className="header-page navbar navbar-expand-md bg-dark navbar-dark fixed-top nav-bk4">
-                    <Link className="navbar-brand" to="/">UlmeZ Weather App</Link>
+                    <Link className="navbar-brand" to="/start">UlmeZ Weather App</Link>
                     
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                         <span className="navbar-toggler-icon"></span>
@@ -53,13 +58,13 @@ class HeaderPage extends React.Component {
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/">Start</Link>
+                                <Link className="nav-link" to="/start">Start</Link>
                             </li>
                             <li className="nav-item">
                                 {this.props.isLoggedIn && <Link className="nav-link" to="/lists">Lists</Link>}
                             </li>
                             <li className="nav-item">
-                                {this.props.isLoggedIn ? <Link className="nav-link" to="/" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
+                                {this.props.isLoggedIn ? <Link className="nav-link" to="/start" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/register">Register</Link>
