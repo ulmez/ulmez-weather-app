@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 
 var User = require('../models/User');
 
+// Get info from one user in user table on id
 module.exports.get_user = function(req, res, next) {
     User.find({
         _id: req.body.id
@@ -21,6 +22,7 @@ module.exports.get_user = function(req, res, next) {
     });
 }
 
+// Registration of new user
 module.exports.register_user = function(req, res, next) {
     User.find({
         email: req.body.email
@@ -36,12 +38,14 @@ module.exports.register_user = function(req, res, next) {
                 message: 'Password must have at least 6 characters'
             });
         } else {
+            // Encryption of password
             bcrypt.hash(req.body.password, 10, (err, hash) => {
                 if(err) {
                     return res.status(500).json({
                         error: err
                     });
                 } else {
+                    // User item to save
                     var itemUser = {
                         firstname: req.body.firstname,
 	                    surname: req.body.surname,
@@ -49,8 +53,10 @@ module.exports.register_user = function(req, res, next) {
                         password: hash
                     };
 
+                    // Instatiating user model
                     const userObj = new User(itemUser);
 
+                    // Save the new user to table user
                     userObj.save((err) => {
                         if (err) {
                             return res.status(500).json({
@@ -68,6 +74,7 @@ module.exports.register_user = function(req, res, next) {
     });
 }
 
+// Login of user
 module.exports.login_user = (req, res, next) => {
     User.find({
         email: req.body.email
@@ -81,6 +88,7 @@ module.exports.login_user = (req, res, next) => {
             });
         }
         
+        // Check if valid password
         bcrypt.compare(req.body.password, users[0].password, (err, result) => {
             if(err) {
                 return res.status(401).json({
@@ -89,6 +97,7 @@ module.exports.login_user = (req, res, next) => {
             }
             
             if(result) {
+                // Set token
                 const token = jwtBlacklist.sign({
                     email: users[0].email,
                     userId: users[0]._id
@@ -98,6 +107,7 @@ module.exports.login_user = (req, res, next) => {
                     expiresIn: "1h"
                 });
                 
+                // Return token
                 return res.status(200).json({
                     message: 'Authorization successful',
                     token: token
@@ -117,11 +127,13 @@ module.exports.login_user = (req, res, next) => {
     });
 }
 
+// Authenticate if token are still valid
 module.exports.authenticate = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwtBlacklist.verify(token, process.env.JWT_KEY);
         
+        // Return decoded token package
         res.status(200).json(decoded);
     } catch(err) {
         res.status(401).json({
@@ -130,10 +142,13 @@ module.exports.authenticate = (req, res, next) => {
     }
 }
 
+// Logout user
 module.exports.logout_user = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         
+        // Blacklisting token so it can not be used again
+        // even if expiration time has not ended yet
         jwtBlacklist.blacklist(token);
         
         res.status(200).json({
@@ -146,15 +161,14 @@ module.exports.logout_user = (req, res, next) => {
     }
 };
 
+// Edit specific weather list for a user
 module.exports.edit_list = (req, res, next) => {
-    // const mongoose = require('mongoose');
-    // const listId = mongoose.Types.ObjectId();
-    // const userObj = new User();
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId(req.body.listId);
     const listName = req.body.listName;
     const arrlistItem = req.body.weathers;
 
+    // Set edited weather list on specific weather list for the user
     User.update(
         {
             _id: id,
@@ -181,13 +195,14 @@ module.exports.edit_list = (req, res, next) => {
     });
 };
 
+// Add new weather list
 module.exports.add_list = (req, res, next) => {
-    // const mongoose = require('mongoose');
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId();
     const listName = req.body.listName;
     const arrlistItem = req.body.weathers;
 
+    // Push new weather list to specific user
     User.update(
         {
             _id: id
@@ -216,11 +231,13 @@ module.exports.add_list = (req, res, next) => {
     });
 };
 
+// Delete specific weather list for a user
 module.exports.delete_list = (req, res, next) => {
     // const mongoose = require('mongoose');
     const id = mongoose.Types.ObjectId(req.body.id);
     const listId = mongoose.Types.ObjectId(req.body.listId);
 
+    // Pull specific weather list from specific user
     User.update( 
         {
             _id: id
