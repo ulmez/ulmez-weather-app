@@ -1,3 +1,4 @@
+// List of weather icons to use depending on code
 const weathers = {
 	"types": [{
 		"code": 1000,
@@ -125,6 +126,7 @@ const weathers = {
 	}]
 };
 
+// List of cities to search for
 const cities = [
 	{
 	  "city": "Adak",
@@ -2708,6 +2710,7 @@ const cities = [
 	}
 	];
 
+	// List of cities to place on europe image map
 	const europeMapCities = [
 		{
 				name: 'Reykjavik',
