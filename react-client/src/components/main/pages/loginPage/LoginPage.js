@@ -36,7 +36,6 @@ class LoginPage extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state);
 
         let loginUserCheck = true;
 
@@ -44,37 +43,35 @@ class LoginPage extends React.Component {
             loginUserCheck = false;
 
             if (this._isMounted) {
-            this.setState({
-                emailErrorMessage: 'No email entered yet...'
-            });
-        }
+                this.setState({
+                    emailErrorMessage: 'No email entered yet...'
+                });
+            }
         } else {
             if (this._isMounted) {
-            this.setState({
-                emailErrorMessage: ''
-            });
-        }
+                this.setState({
+                    emailErrorMessage: ''
+                });
+            }
         }
 
         if(this.state.password === "") {
             loginUserCheck = false;
 
             if (this._isMounted) {
-            this.setState({
-                passwordErrorMessage: 'No password entered yet...'
-            });
-        }
+                this.setState({
+                    passwordErrorMessage: 'No password entered yet...'
+                });
+            }
         } else {
             if (this._isMounted) {
-            this.setState({
-                passwordErrorMessage: ''
-            });
-        }
+                this.setState({
+                    passwordErrorMessage: ''
+                });
+            }
         }
 
         if(loginUserCheck) {
-            console.log("Login success!");
-
             const loginItem = {
                 email: this.state.email,
                 password: this.state.password
@@ -83,43 +80,41 @@ class LoginPage extends React.Component {
             try {
                 const userLoginObj = await axios.post('/users/user/login', loginItem);
 
-                console.log(userLoginObj.data.token);
-
+                // Set token to localStorage token
                 localStorage.setItem('token', userLoginObj.data.token);
 
+                // Set global redux variable isLoggedIn to true
                 this.props.setLoggedIn();
 
                 if (this._isMounted) {
-                this.setState({
-                    email: '',
-                    password: '',
-                    successMessage: 'Successfully logged in user!'
-                });
-            }
+                    this.setState({
+                        email: '',
+                        password: '',
+                        successMessage: 'Successfully logged in user!'
+                    });
+                }
 
                 setTimeout(() => {
                     if (this._isMounted) {
+                        this.setState({
+                            successMessage: ''
+                        });
+                    }
+                }, 4000);
+            } catch(e) {
+                if (this._isMounted) {
                     this.setState({
+                        axiosErrorMessage: 'Not valid login criteria...',
                         successMessage: ''
                     });
                 }
-                }, 4000);
-            } catch(e) {
-                console.log('Not right login criteria...');
-
-                if (this._isMounted) {
-                this.setState({
-                    axiosErrorMessage: 'Not valid login criteria...',
-                    successMessage: ''
-                });
-            }
-
+            
                 setTimeout(() => {
                     if (this._isMounted) {
-                    this.setState({
-                        axiosErrorMessage: ''
-                    });
-                }
+                        this.setState({
+                            axiosErrorMessage: ''
+                        });
+                    }
                 }, 3000);
             }
         }
@@ -127,7 +122,7 @@ class LoginPage extends React.Component {
 
     handleChange(event) {
         if (this._isMounted) {
-        this.setState({[event.target.name]: event.target.value});
+            this.setState({[event.target.name]: event.target.value});
         }
     }
 
