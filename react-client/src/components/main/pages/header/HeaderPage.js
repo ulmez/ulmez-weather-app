@@ -62,7 +62,7 @@ class HeaderPage extends React.Component {
                                 {this.props.isLoggedIn && <Link className="nav-link" to="/lists">Lists</Link>}
                             </li>
                             <li className="nav-item">
-                                {this.props.isLoggedIn ? <Link className="nav-link" to="/start" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
+                                {this.props.isLoggedIn ? <Link className="nav-link" to="/login" onClick={this.logout}>Logout</Link> : <Link className="nav-link" to="/login">Login</Link>}
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/register">Register</Link>
