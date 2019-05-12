@@ -16,14 +16,11 @@ class HeaderPage extends React.Component {
         this.logout = this.logout.bind(this);
     }
 
-    // componentWillReceiveProps() {
-    //     console.log('route reload');
-    // }
-
     componentDidMount() {
         authenticationCheck(this);
     }
 
+    // Logout of user
     logout() {
         const token = localStorage.getItem('token');
 
@@ -33,6 +30,8 @@ class HeaderPage extends React.Component {
             }
         };
     
+        // Blacklisting users token, removing localStorage token
+        // and setting redux global variable isLoggedIn to false
         axios.post('/users/user/logout', null, tokenHeader)
         .then((res) => {
             console.log(res.data);
@@ -45,7 +44,6 @@ class HeaderPage extends React.Component {
     }
 
     render() {
-        console.log(this.props.isLoggedIn);
         return (
             <header>
                 <nav className="header-page navbar navbar-expand-md bg-dark navbar-dark fixed-top nav-bk4">
