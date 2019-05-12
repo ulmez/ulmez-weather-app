@@ -22,9 +22,9 @@ class ListBox extends React.Component {
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this._isMounted = false;
-      }
+    }
 
     componentDidMount() {
         this._isMounted = true;
@@ -33,70 +33,54 @@ class ListBox extends React.Component {
     }
 
     popupWindow(id) {
-        // console.log($("#hiddenPopup" + id).height());
+        // Check if browser window are bigger or equal to 576 pixels
         if(window.innerWidth >= 576) {
-            console.log('popupWindow 1');
             const pos = $('#listCard' + id).position();
             const relX = window.event.pageX - pos.left;
             const hiddenPopup = $("#hiddenPopup" + id);
             const hiddenPopupList = $("[id*='hiddenPopup']");
 
-            // hiddenPopup[0].style.display = "block";
+            // Setting position of popup weather stats window
             hiddenPopup[0].style.left = (relX + 15) + "px";
             hiddenPopup[0].style.top = 115 - $("#hiddenPopup" + id).height() + "px";
 
-            // hiddenPopup.stop();
-            // hiddenPopup.fadeIn(1000);
+            // Show the popup weather stats window
             hiddenPopup.show();
 
             for(let i = 0; i < hiddenPopupList.length; i++) {
-                // console.log(hiddenPopupList[i]);
+                // Make sure only the hovered popup window are shown
                 if(hiddenPopupList[i].id !== "hiddenPopup" + id) {
-                    // hiddenPopupList[i].style.display = "none";
                     $(hiddenPopupList[i]).hide();
                 }
             }
         }
     }
 
+    // Hide popup window
     hidePopupWindow() {
+        // Check if browser window are bigger or equal to 576 pixels
         if(window.innerWidth >= 576) {
-            console.log('hidePopupWindow 0');
-            // console.log($("[id*='hiddenPopup']"));
             const hiddenPopupList = $("[id*='hiddenPopup']");
-            // console.log(hiddenPopupList[0]);
-            // $('[id*="cat"]')
-            // const hiddenPopup = $("#hiddenPopup" + id);
 
-            // hiddenPopup[0].style.display = "none";
-
+            // Go through all popup windows and set them to display none
             for(let i = 0; i < hiddenPopupList.length; i++) {
                 hiddenPopupList[i].style.display = "none";
             }
         }
     }
 
+    // Get browser dimentions on resize
     updateWindowDimensions() {
         if (this._isMounted) {
-        this.setState({
-            width: window.innerWidth,
-            height: window.innerHeight
-        });
-    }
+            // Save browser width and height to state width and height
+            this.setState({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        }
     }
 
     render() {
-        console.log('*********');
-        console.log('*********');
-        // console.log(this.state.width);
-        // console.log(this.state.height);
-        // console.log(this.state.showPopup);
-        console.log(this.props);
-        // console.log(this.state.RGBColor);
-        console.log('*********');
-        console.log('*********');
-        // console.log(this.props.RGBTemperature);
-        // console.log(this.props.weatherIcon);
         return (
             <div id={"listCard" + this.props.getIndex} onMouseMove={() => this.popupWindow(this.props.getIndex)} onMouseLeave={this.hidePopupWindow} className="list-box background-outer col-sm-12 col-md-6 col-lg-4 col-xl-4 fade-in-list-box">
                 <div className="row p-2 align-self-center">
