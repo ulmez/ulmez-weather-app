@@ -3,6 +3,7 @@ var router = express.Router();
 var userController = require('../controllers/UserController');
 var checkAuth = require('../middleware/checkAuth');
 
+// User Routes
 router.post('/user', checkAuth, userController.get_user);
 router.post('/user/register', userController.register_user);
 router.post('/user/login', userController.login_user);
