@@ -1,0 +1,90 @@
+.list-box.background-outer {
+    background-color: transparent;
+    color: white;
+}
+
+.list-box.background-inner {
+    background-color: gray;
+}
+
+.list-box.box-height {
+    height: 100px;
+}
+
+.list-box.icon-design {
+    font-size: 3em;
+}
+
+.list-box.celsius-design {
+    font-size: 1.5em;
+    height: 25px;
+}
+
+.list-box.cursor-pointer {
+    cursor: pointer;
+}
+
+.list-box.hidden-popup {
+    opacity: 0.9;
+    display: none;
+    position: absolute;
+    min-width: 350px;
+    z-index: 9998;
+}
+
+.modal-dialog {
+    opacity: 0.9;
+}
+
+.list-box.fade-in-list-box {
+    animation: fadeInListBox ease 0.5s;
+    -webkit-animation: fadeInListBox ease 0.5s;
+    -moz-animation: fadeInListBox ease 0.5s;
+    -o-animation: fadeInListBox ease 0.5s;
+    -ms-animation: fadeInListBox ease 0.5s;
+  }
+
+  @keyframes fadeInListBox{
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-moz-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-webkit-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-o-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-ms-keyframes fadeInListBox {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }

@@ -1,0 +1,16 @@
+.login-page.jumbotron-design {
+	background: rgba(255,255,255,0.6);
+	border: #ffffff 1px;
+	border-style: solid;
+}
+
+.login-page.label-sized-text {
+	font-family: sans-serif;
+	font-size: 0.95em;
+}
+
+.login-page.gradient-button {
+    background: #30982e; 
+    background: -webkit-linear-gradient(to right, #30982e, #42d33f); 
+    background: linear-gradient(to right, #30982e, #42d33f);
+}

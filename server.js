@@ -7,7 +7,8 @@ var cors = require('cors');
 var logger = require('morgan');
 var multipart = require('connect-multiparty');
 
-var testsRouter = require('./routes/tests');
+var usersRouter = require('./routes/users');
+var apixuRouter = require('./routes/apixu');
 
 var app = express();
 
@@ -20,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(multipart());
 
-app.use('/tests', testsRouter);
+app.use('/users', usersRouter);
+app.use('/apixus', apixuRouter);
 
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('/react-client/build'));
