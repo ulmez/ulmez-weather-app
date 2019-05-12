@@ -275,9 +275,9 @@ class StartPage extends Component {
         }
     
         // Sets the RGB color to be used for the specific temperature
-        let tempR = r1 + Math.floor(stepR * checkAllowedTemperature);
-        let tempG = g1 + Math.floor(stepG * checkAllowedTemperature);
-        let tempB = b1 + Math.floor(stepB * checkAllowedTemperature);
+        const tempR = r1 + Math.floor(stepR * checkAllowedTemperature);
+        const tempG = g1 + Math.floor(stepG * checkAllowedTemperature);
+        const tempB = b1 + Math.floor(stepB * checkAllowedTemperature);
     
         return [tempR, tempG, tempB];
     }
@@ -364,24 +364,24 @@ class StartPage extends Component {
         // Do this to make sure europe image map have loaded before using it
         this.loadImages(this.state.imagePaths, (loadedImages) => {
             // Converts R, G, B to hex
-            function componentToHex(c) {
+            const componentToHex = (c) => {
                 var hex = c.toString(16);
                 return hex.length === 1 ? "0" + hex : hex;
             }
             
             // Converts RBG color to hex color
-            function rgbToHex(r, g, b) {
+            const rgbToHex = (r, g, b) => {
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
     
             // Dimension on canvas
-            var width = 541;
-            var height = 250;
+            const width = 541;
+            const height = 250;
     
             // Sets and places all objects to canvas
-            function drawImage() {
+            const drawImage = () => {
                 // Stage
-                var stage = new Konva.Stage({
+                const stage = new Konva.Stage({
                     container: 'canvas-container',
                     width: width,
                     height: height,
@@ -389,17 +389,17 @@ class StartPage extends Component {
                 });
     
                 // Layer
-                var layer = new Konva.Layer();
+                const layer = new Konva.Layer();
 
                 // Europe map
-                var europeMapImage = new Konva.Image({
+                const europeMapImage = new Konva.Image({
                     image: loadedImages['https://i.imgur.com/K7k4Iaa.jpg']
                 });
 
                 // Generate Label
-                function label(text, x, y, rgbColor, temperature) {
+                const label = (text, x, y, rgbColor, temperature) => {
                     // Label
-                    var simpleLabel = new Konva.Label({
+                    const simpleLabel = new Konva.Label({
                         x: x,
                         y: y
                     });
@@ -439,17 +439,17 @@ class StartPage extends Component {
                 }
 
                 // Europe image map url address
-                var europeImageUrl = 'https://i.imgur.com/K7k4Iaa.jpg';
+                const europeImageUrl = 'https://i.imgur.com/K7k4Iaa.jpg';
 
                 // Group
-                var group = new Konva.Group({
+                const group = new Konva.Group({
                     x: stage.width() / 2 - loadedImages[europeImageUrl].width / 2,
                     y: stage.height() / 2 - loadedImages[europeImageUrl].height / 2,
                     width: loadedImages[europeImageUrl].width,
                     height: loadedImages[europeImageUrl].height,
                     draggable: true,
-                    dragBoundFunc: function(pos) {
-                        var newX, newY;
+                    dragBoundFunc: (pos) => {
+                        let newX, newY;
     
                         if(pos.x < 0 && pos.x > -(loadedImages[europeImageUrl].width - width)) {
                             newX = pos.x;
@@ -481,12 +481,12 @@ class StartPage extends Component {
                 });
 
                 // add cursor styling to europe image map
-                europeMapImage.on('mouseover', function() {
+                europeMapImage.on('mouseover', () => {
                     document.body.style.cursor = 'pointer';
                 });
 
                 // add cursor styling to europe image map
-                europeMapImage.on('mouseout', function() {
+                europeMapImage.on('mouseout', () => {
                     document.body.style.cursor = 'default';
                 });
 
@@ -496,24 +496,24 @@ class StartPage extends Component {
                 // Loop through all cities to place on europe image map
                 thisParam.props.citiesOnMap.forEach(async (item) => {
                     // Get RGB color to use for temperature
-                    var colorTemp = await thisParam.getRGBTemperature(item.current.temp_c);
+                    const colorTemp = await thisParam.getRGBTemperature(item.current.temp_c);
 
                     // Set key colorTemperature to item object
                     item.colorTemperature = colorTemp;
 
-                    var name = item.location.name.toUpperCase();
-                    var x = item.x;
-                    var y = item.y;
-                    var rgb = item.colorTemperature;
-                    var temperature = item.current.temp_c;
+                    const name = item.location.name.toUpperCase();
+                    const x = item.x;
+                    const y = item.y;
+                    const rgb = item.colorTemperature;
+                    const temperature = item.current.temp_c;
 
                     // Set label
-                    var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
+                    const simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
                     // Add mousemove event to label
-                    simpleLabel.on('mousemove', function() {
+                    simpleLabel.on('mousemove', () => {
                         if(thisParam.state.width >= 576) {
-                            var popup = document.getElementById('popup');
+                            const popup = document.getElementById('popup');
                             popup.style.top = (window.event.pageY - 200) + 'px';
                             popup.style.left = (window.event.pageX + 15) + 'px';
                             popup.style.display = 'block';
@@ -521,37 +521,8 @@ class StartPage extends Component {
                     });
 
                     // Add mouseenter event to label
-                    simpleLabel.on('mouseenter', function() {
+                    simpleLabel.on('mouseenter', () => {
                         if (thisParam._isMounted) {
-                        thisParam.setState({
-                            popup: {
-                                city: item.location.name,
-                                country: item.location.country,
-                                date: item.location.localtime,
-                                weather: item.current.condition.text,
-                                temperature: item.current.temp_c,
-                                feelsLike: item.current.feelslike_c,
-                                humidity: item.current.humidity,
-                                windDirection: item.current.wind_dir,
-                                windDegree: item.current.wind_degree,
-                                windForce: item.current.wind_kph
-                            }
-                        });
-                    }
-                    });
-    
-                    // Add mouseout event to label
-                    simpleLabel.on('mouseout', function() {
-                        var popup = document.getElementById('popup');
-                        popup.style.display = 'none';
-            
-                        document.body.style.cursor = 'default';
-                    });
-
-                    // Add click event to label
-                    simpleLabel.on('click', function() {
-                        if(thisParam.state.width < 576) {
-                            if (thisParam._isMounted) {
                             thisParam.setState({
                                 popup: {
                                     city: item.location.name,
@@ -567,40 +538,69 @@ class StartPage extends Component {
                                 }
                             });
                         }
+                    });
+    
+                    // Add mouseout event to label
+                    simpleLabel.on('mouseout', () => {
+                        const popup = document.getElementById('popup');
+                        popup.style.display = 'none';
+            
+                        document.body.style.cursor = 'default';
+                    });
 
+                    // Add click event to label
+                    simpleLabel.on('click', () => {
+                        if(thisParam.state.width < 576) {
+                            if (thisParam._isMounted) {
+                                thisParam.setState({
+                                    popup: {
+                                        city: item.location.name,
+                                        country: item.location.country,
+                                        date: item.location.localtime,
+                                        weather: item.current.condition.text,
+                                        temperature: item.current.temp_c,
+                                        feelsLike: item.current.feelslike_c,
+                                        humidity: item.current.humidity,
+                                        windDirection: item.current.wind_dir,
+                                        windDegree: item.current.wind_degree,
+                                        windForce: item.current.wind_kph
+                                    }
+                                });
+                            }
                             $('#popupModal').modal('show');
                         }
 
                         if (thisParam._isMounted) {
-                        thisParam.setState({
-                            city: item.location.name,
-                            showDropdownBox: false
-                        });
-                    }
+                            thisParam.setState({
+                                city: item.location.name,
+                                showDropdownBox: false
+                            });
+                        }
                     });
 
                     // Add tap event to label
-                    simpleLabel.on('tap', function() {
+                    simpleLabel.on('tap', () => {
                         if (thisParam._isMounted) {
-                        thisParam.setState({
-                            city: item.location.name,
-                            showDropdownBox: false,
-                            popup: {
+                            thisParam.setState({
                                 city: item.location.name,
-                                country: item.location.country,
-                                date: item.location.localtime,
-                                weather: item.current.condition.text,
-                                temperature: item.current.temp_c,
-                                feelsLike: item.current.feelslike_c,
-                                humidity: item.current.humidity,
-                                windDirection: item.current.wind_dir,
-                                windDegree: item.current.wind_degree,
-                                windForce: item.current.wind_kph
-                            }
-                        });
-                    }
+                                showDropdownBox: false,
+                                popup: {
+                                    city: item.location.name,
+                                    country: item.location.country,
+                                    date: item.location.localtime,
+                                    weather: item.current.condition.text,
+                                    temperature: item.current.temp_c,
+                                    feelsLike: item.current.feelslike_c,
+                                    humidity: item.current.humidity,
+                                    windDirection: item.current.wind_dir,
+                                    windDegree: item.current.wind_degree,
+                                    windForce: item.current.wind_kph
+                                }
+                            });
+                        }
                         $('#popupModal').modal('show');
                     });
+
                     // Add label to group
                     group.add(simpleLabel);
 
