@@ -7,8 +7,6 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Konva from 'konva';
 
-// import { authenticationCheck } from '../../../helpers/users';
-
 import { setCitiesOnMap, setBackRefreshCheck } from '../../../../store/actions/headerAction';
 
 import { weathers, cities } from '../../../../inits/init';
@@ -58,14 +56,6 @@ class StartPage extends Component {
     componentWillReceiveProps() {
         console.log('route reload');
         this.props.history.push("/");
-        // this.props.setBackRefreshCheck();
-    //     if (this._isMounted) {
-    //     this.setState({
-    //         listName: '',
-    //         weathers: []
-    //     });
-    // }
-    //     this.canvasGenerator(this);
     }
 
     componentWillUnmount(){
@@ -74,21 +64,19 @@ class StartPage extends Component {
 
     componentDidMount() {
         this._isMounted = true;
+
         if(this.props.refreshCheck) {
             this.props.history.push("/");
         } else {
             this.canvasGenerator(this);
             this.resizeCanvas();
             window.addEventListener('resize', this.resizeCanvas);
-console.log(this.props.location.state);
-            if(this.props.location.state !== undefined) {
-                // console.log('********');
-                // console.log(this.props.location.state.listId);
-                // console.log(this.props.location.state.listName);
-                // console.log(this.props.location.state.weathers);
-                // console.log('********');
 
+            // Check if user have choosen a weather list
+            if(this.props.location.state !== undefined) {
+                // Loop through all cities names
                 this.props.location.state.weathers.map((city) => {
+                    // Get weather stats from each city in APIXU
                     return axios.get(`/apixus/apixu/city/${city}`)
                     .then((item) => {
                         this.state.weathers.push({
@@ -98,11 +86,12 @@ console.log(this.props.location.state);
                         });
     
                         if (this._isMounted) {
-                        this.setState({
-                            listName: this.props.location.state.listName,
-                            weathers: this.state.weathers
-                        });
-                    }
+                            // Load in all weather stats in state listName and weathers
+                            this.setState({
+                                listName: this.props.location.state.listName,
+                                weathers: this.state.weathers
+                            });
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
@@ -112,9 +101,12 @@ console.log(this.props.location.state);
         }
     }
 
+    // Search for weather stats of specific city
     searchCityName() {
+        // Get weather stats from entered text in search textfield
         axios.get(`/apixus/apixu/city/${this.state.city}`)
         .then((result) => {
+            // Push in searched city weather stats to state weathers
             this.state.weathers.push({
                 location: result.data.stats.location,
                 current: result.data.stats.current,
@@ -122,11 +114,12 @@ console.log(this.props.location.state);
             });
 
             if (this._isMounted) {
-            this.setState({
-                weathers: this.state.weathers,
-                city: ''
-            });
-        }
+                // Do this to update city weather stats
+                this.setState({
+                    weathers: this.state.weathers,
+                    city: ''
+                });
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -135,83 +128,89 @@ console.log(this.props.location.state);
 
     handleChangeCity(event) {
         if (this._isMounted) {
-        this.setState({
-            city: event.target.value,
-            showDropdownBox: true
-        });
-    }
+            this.setState({
+                city: event.target.value,
+                showDropdownBox: true
+            });
+        }
     }
 
     handleChangeListName(event) {
         if (this._isMounted) {
-        this.setState({
-            listName: event.target.value
-        });
-    }
+            this.setState({
+                listName: event.target.value
+            });
+        }
     }
 
+    // Removes weather box
     deleteBox(index) {
-        // console.log(index);
         const listCard = $('#listCard' + index);
 
         listCard.fadeOut(500);
 
         setTimeout(() => {
+            // Removes selected box from the state weathers array
             this.state.weathers.splice(index, 1);
 
             if (this._isMounted) {
-            this.setState({
-                weathers: this.state.weathers
-            });
-        }
+                // Do this to update city weather stats
+                this.setState({
+                    weathers: this.state.weathers
+                });
+            }
 
             listCard.fadeIn(0);
         }, 400);
     }
 
+    // Add or edit  weather list for user
     async addWeatherList() {
-        if(localStorage.getItem('token')) {
-            const token = localStorage.getItem('token');
-    
-            const tokenHeader = {
-                headers: {
-                    'Authorization': 'Bearer ' + token
+        try {
+            // Check if localStorage token are set
+            if(localStorage.getItem('token')) {
+                const token = localStorage.getItem('token');
+        
+                const tokenHeader = {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                };
+
+                const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
+                const nameList = [];
+
+                this.state.weathers.forEach((weather) => {
+                    nameList.push(weather.location.name);
+                });
+
+                // Check that user have selected a list to edit
+                if(this.props.location.state !== undefined) {
+                    const editItem = {
+                        id: userAuth.data.userId,
+                        listId: this.props.location.state.listId,
+                        listName: this.state.listName,
+                        weathers: nameList
+                    };
+
+                    // Updates selected list to user
+                    await axios.post('/users/user/editlist', editItem, tokenHeader);
+                } else {
+                    const addItem = {
+                        id: userAuth.data.userId,
+                        listName: this.state.listName,
+                        weathers: nameList
+                    };
+
+                    // Adds new list to user
+                    await axios.post('/users/user/addlist', addItem, tokenHeader);
                 }
-            };
 
-            const userAuth = await axios.post('/users/user/auth', null, tokenHeader);
-            // console.log(userAuth.data.userId);
-
-            const nameList = [];
-
-            this.state.weathers.forEach((weather) => {
-                nameList.push(weather.location.name);
-            });
-
-            // console.log('********');
-            // console.log(nameList);
-            // console.log('********');
-
-            if(this.props.location.state !== undefined) {
-                const editItem = {
-                    id: userAuth.data.userId,
-                    listId: this.props.location.state.listId,
-                    listName: this.state.listName,
-                    weathers: nameList
-                };
-
-                await axios.post('/users/user/editlist', editItem, tokenHeader);
-            } else {
-                const addItem = {
-                    id: userAuth.data.userId,
-                    listName: this.state.listName,
-                    weathers: nameList
-                };
-
-                await axios.post('/users/user/addlist', addItem, tokenHeader);
+                // Redirected to list page
+                this.props.history.push("/lists");
             }
-
-            this.props.history.push("/lists");
+        } catch(err) {
+            console.log(err);
         }
     }
 
@@ -283,6 +282,8 @@ console.log(this.props.location.state);
         return [tempR, tempG, tempB];
     }
 
+    // Choose temperature scale depending on if
+    // temperature is over or below zero celcius
     getRGBTemperature(temperature) {
         if (temperature >= 0) {
             return this.colorOfTemperature([0, 158, 229], [191, 64, 0], 30, temperature);
@@ -291,6 +292,7 @@ console.log(this.props.location.state);
 		}
     }
 
+    // Get right icon depending on if its night or day
     getWeatherIcon(is_day, code) {
         if(is_day === 1) {
             for(let i = 0; i < weathers.types.length; i++) {
@@ -307,6 +309,7 @@ console.log(this.props.location.state);
         }
     }
 
+    // Returns list of cities to choose depending on text in the search text field
     citySearch(searchCriteria) {
         const sortedCities = _.orderBy(cities, ['city'],['asc']);
 
@@ -319,26 +322,27 @@ console.log(this.props.location.state);
         }
     }
 
+    // Get and set text for selected city in search dropdown box
     dropdownSelect(event) {
-        // console.log(event.target.parentNode.firstChild.textContent);
         if (this._isMounted) {
-        this.setState({
-            city: event.target.parentNode.firstChild.textContent,
-            showDropdownBox: false
-        });
-    }
+            this.setState({
+                city: event.target.parentNode.firstChild.textContent,
+                showDropdownBox: false
+            });
+        }
     }
 
+    // Set to hide the search dropdown box
     abortDrowdownBox() {
         if (this._isMounted) {
-        this.setState({
-            showDropdownBox: false
-        });
-    }
+            this.setState({
+                showDropdownBox: false
+            });
+        }
     }
 
-    // Load images and run the whenLoaded callback when all have loaded;
-    // The callback is passed an array of loaded Image objects.
+    // Load images and run the whenLoaded callback when all have loaded
+    // The callback is passed an array of loaded Image objects
     loadImages(paths, whenLoaded) {
         const imgs=[];
         let counter = 0;
@@ -355,23 +359,28 @@ console.log(this.props.location.state);
         });
     }
 
+    // Generates content in canvas
     canvasGenerator(thisParam) {
+        // Do this to make sure europe image map have loaded before using it
         this.loadImages(this.state.imagePaths, (loadedImages) => {
-            console.log(loadedImages);
-
+            // Converts R, G, B to hex
             function componentToHex(c) {
                 var hex = c.toString(16);
                 return hex.length === 1 ? "0" + hex : hex;
             }
             
+            // Converts RBG color to hex color
             function rgbToHex(r, g, b) {
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
     
+            // Dimension on canvas
             var width = 541;
             var height = 250;
     
+            // Sets and places all objects to canvas
             function drawImage() {
+                // Stage
                 var stage = new Konva.Stage({
                     container: 'canvas-container',
                     width: width,
@@ -379,6 +388,7 @@ console.log(this.props.location.state);
                     visible: false
                 });
     
+                // Layer
                 var layer = new Konva.Layer();
 
                 // Europe map
@@ -386,12 +396,15 @@ console.log(this.props.location.state);
                     image: loadedImages['https://i.imgur.com/K7k4Iaa.jpg']
                 });
 
+                // Generate Label
                 function label(text, x, y, rgbColor, temperature) {
+                    // Label
                     var simpleLabel = new Konva.Label({
                         x: x,
                         y: y
                     });
 
+                    // Add circle to label
                     simpleLabel.add(
                         new Konva.Circle({
                             x: -11,
@@ -403,6 +416,7 @@ console.log(this.props.location.state);
                         })
                     );
 
+                    // Add tag to label
                     simpleLabel.add(
                         new Konva.Tag({
                             fill: 'black',
@@ -410,6 +424,7 @@ console.log(this.props.location.state);
                         })
                     );
 
+                    // Add text to label
                     simpleLabel.add(
                         new Konva.Text({
                             text: text + ' ' + temperature + ' °C',
@@ -423,7 +438,10 @@ console.log(this.props.location.state);
                     return simpleLabel;
                 }
 
+                // Europe image map url address
                 var europeImageUrl = 'https://i.imgur.com/K7k4Iaa.jpg';
+
+                // Group
                 var group = new Konva.Group({
                     x: stage.width() / 2 - loadedImages[europeImageUrl].width / 2,
                     y: stage.height() / 2 - loadedImages[europeImageUrl].height / 2,
@@ -462,23 +480,25 @@ console.log(this.props.location.state);
                     }
                 });
 
-                // add cursor styling
+                // add cursor styling to europe image map
                 europeMapImage.on('mouseover', function() {
                     document.body.style.cursor = 'pointer';
                 });
 
+                // add cursor styling to europe image map
                 europeMapImage.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 });
 
+                // Add europe image map to group
                 group.add(europeMapImage);
 
-                var someCounter = 0;
+                // Loop through all cities to place on europe image map
                 thisParam.props.citiesOnMap.forEach(async (item) => {
-                    someCounter++;
-                    
+                    // Get RGB color to use for temperature
                     var colorTemp = await thisParam.getRGBTemperature(item.current.temp_c);
 
+                    // Set key colorTemperature to item object
                     item.colorTemperature = colorTemp;
 
                     var name = item.location.name.toUpperCase();
@@ -487,8 +507,10 @@ console.log(this.props.location.state);
                     var rgb = item.colorTemperature;
                     var temperature = item.current.temp_c;
 
+                    // Set label
                     var simpleLabel = label(name, x, y, rgbToHex(rgb[0], rgb[1], rgb[2]), temperature);
 
+                    // Add mousemove event to label
                     simpleLabel.on('mousemove', function() {
                         if(thisParam.state.width >= 576) {
                             var popup = document.getElementById('popup');
@@ -498,6 +520,7 @@ console.log(this.props.location.state);
                         }
                     });
 
+                    // Add mouseenter event to label
                     simpleLabel.on('mouseenter', function() {
                         if (thisParam._isMounted) {
                         thisParam.setState({
@@ -517,6 +540,7 @@ console.log(this.props.location.state);
                     }
                     });
     
+                    // Add mouseout event to label
                     simpleLabel.on('mouseout', function() {
                         var popup = document.getElementById('popup');
                         popup.style.display = 'none';
@@ -524,6 +548,7 @@ console.log(this.props.location.state);
                         document.body.style.cursor = 'default';
                     });
 
+                    // Add click event to label
                     simpleLabel.on('click', function() {
                         if(thisParam.state.width < 576) {
                             if (thisParam._isMounted) {
@@ -554,6 +579,7 @@ console.log(this.props.location.state);
                     }
                     });
 
+                    // Add tap event to label
                     simpleLabel.on('tap', function() {
                         if (thisParam._isMounted) {
                         thisParam.setState({
@@ -575,25 +601,36 @@ console.log(this.props.location.state);
                     }
                         $('#popupModal').modal('show');
                     });
+                    // Add label to group
                     group.add(simpleLabel);
+
+                    // Draw content in layer
                     layer.draw();
                 });
                 $("#startPageContainer").css({visibility: "visible"});
+
+                // Add group to layer
                 layer.add(group);
+
+                // Add layer to stage
                 stage.add(layer);
+
+                // Show stage
                 stage.show();
             }
+
+            // Display everything
             drawImage();
         });
     }
 
     resizeCanvas() {
         if (this._isMounted) {
-        this.setState({
-            width: window.innerWidth,
-            height: window.innerHeight
-        });
-    }
+            this.setState({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        }
     }
 
     render() {
