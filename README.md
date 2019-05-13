@@ -4,7 +4,10 @@ Inlämning av: Ulf Zackrisson
 
 En README fil för denna repository.
 
-### Link to ER Diagram:
+### User Personas och User Stories
+https://docs.google.com/document/d/1PLWLXeffmCJD9a-kuKnd8fyysKTURkR8GF_ql6HDVD8/edit
+
+### ER Diagram:
 https://app.sqldbm.com/SQLServer/Edit/p7966/#
 
 ### Sitemap
