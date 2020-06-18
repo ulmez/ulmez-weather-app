@@ -6,7 +6,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "konva": "^3.2.5",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
