@@ -4,7 +4,7 @@ var axios = require('axios');
 module.exports.search_city = async (req, res, next) => {
     try {
         var city = req.params.name;
-        var result = await axios.get(process.env.BASE_APIXU_URL + '/current.json?key=' + process.env.APIXU_KEY + '&q=' + city);
+        var result = await axios.get(process.env.BASE_APIXU_URL + '/current?access_key=' + process.env.APIXU_KEY + '&query=' + city);
 
         console.log(result.data);
 
@@ -27,7 +27,7 @@ module.exports.search_cities = async (req, res, next) => {
         const arr = [];
         let counter = 0;
         cities.forEach(async (city) => {
-            const temp = await axios.get(process.env.BASE_APIXU_URL + '/current.json?key=' + process.env.APIXU_KEY + '&q=' + city.name);
+            const temp = await axios.get(process.env.BASE_APIXU_URL + '/current?access_key=' + process.env.APIXU_KEY + '&query=' + city.name);
             temp.data.x = city.x;
             temp.data.y = city.y;
             arr.push(temp.data);
