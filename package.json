@@ -8,7 +8,7 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react-client && npm run build --prefix react-client"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.2",
     "cloudinary": "^1.11.0",
